@@ -90,14 +90,7 @@ class _LoginState extends State<Login> {
                         }
                       },
                     ),
-                    SizedBox(height: 30.0),
-                    Text(
-                      "Forgot password?",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff01A0C7)),
-                    ),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 50.0),
                     Container(
                       height: 50.0,
                       child: GestureDetector(
@@ -218,7 +211,7 @@ class _LoginState extends State<Login> {
             size: 28,
             color: Colors.white,
           ),
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 5),
           backgroundColor: Colors.redAccent,
         )..show(context);
       }

@@ -119,7 +119,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.number,
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "ID NUMBER field cannot be blank";
@@ -159,7 +159,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "EMAIL field cannot be blank";
@@ -219,13 +219,13 @@ class _RegisterState extends State<Register> {
     );
   }
 
-////////////Handling user registration///////////
+/*Handles Form submission */
   void _handleRegister() async {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
 
-      //User data to be pushed to db//
+      /*User data to be submitted */
       var data = {
         'id': userId.text,
         'fname': firstName.text,
@@ -235,19 +235,18 @@ class _RegisterState extends State<Register> {
         'idNumber': idNumber.text,
       };
 
-      //Set the registration button to loading state//
+      /*Set the registration button to loading state */
       setState(() {
         _isLoading = true;
       });
 
-      //Handles posting user data via API//
+      /*Handles posting user data */
       var response = await CallAPi().postData(data, 'register');
       var body = json.decode(response.body);
       if (body == 'success') {
-        //Navigate to login page
         Navigator.pop(context);
 
-        //Confirmation message//
+        /*Success message */
         Flushbar(
           message: 'Registration was successfull!',
           icon: Icon(
@@ -259,10 +258,45 @@ class _RegisterState extends State<Register> {
           backgroundColor: Colors.green,
         )..show(context);
 
-        //Set loading state of button to false//
+        /**Set loading state of button to false &&
+         * Clear the text fields
+        */
+        userId.clear();
+        firstName.clear();
+        surname.clear();
+        idNumber.clear();
+        phone.clear();
+        email.clear();
+
         setState(() {
           _isLoading = false;
         });
+      } else {
+        /**Set loading state of button to false &&
+         * Clear the text fields
+        */
+        userId.clear();
+        firstName.clear();
+        surname.clear();
+        idNumber.clear();
+        phone.clear();
+        email.clear();
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        /*Error message */
+        Flushbar(
+          message: 'Admission No or Employee Id entered is already registered!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.red,
+        )..show(context);
       }
     }
   }
