@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'package:assetracking/API/api.dart';
-import 'package:assetracking/pages/login.dart';
 import 'package:assetracking/sessions/startButton.dart';
 import 'package:assetracking/sessions/stop.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Start extends StatefulWidget {
@@ -16,20 +13,13 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-  ///Styling for texts///
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
-  ///Initialize the variables///
   String barcode = "";
-  String id;
-  String _lab;
-
-  List labs = List();
 
   @override
   void initState() {
     super.initState();
-    this.getLabs();
   }
 
   @override
@@ -47,10 +37,9 @@ class _StartState extends State<Start> {
                 child: IconButton(
                   icon: Icon(
                     Icons.exit_to_app,
-                    size: 30.0,
                     color: Colors.white,
                   ),
-                  onPressed: () => _onExitApp(context),
+                  onPressed: alert,
                 ),
               ),
             ]),
@@ -61,7 +50,7 @@ class _StartState extends State<Start> {
         ));
   }
 
-////////////Start Screen Widget/////////////
+/*Start screen widget */
   Widget startScreen() {
     return Container(
       padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -79,50 +68,10 @@ class _StartState extends State<Start> {
                   )),
             ),
           ),
-
-          SizedBox(height: 28.0),
-
-          ///Dropdown button for labs///
+          SizedBox(height: 20.0),
           Center(
             child: Container(
-              child: DropdownButton(
-                icon: Icon(Icons.arrow_drop_down),
-                iconSize: 50,
-                underline: Container(
-                  height: 3.0,
-                  color: Color(0xff01A0C7),
-                ),
-                elevation: 10,
-                hint: Text(
-                  "Select Computer Lab",
-                  style: style,
-                ),
-                items: labs.map((item) {
-                  return DropdownMenuItem(
-                    value: item['labId'],
-                    child: Text(
-                      item['description'],
-                      style: style,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (newVal) {
-                  setState(() {
-                    _lab = newVal;
-                  });
-                },
-                value: _lab,
-              ),
-            ),
-          ),
-
-          SizedBox(height: 35.0),
-
-          /////Scan button/////
-          Center(
-            child: Container(
-              width: 250.0,
-              height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.75,
               child: FloatingActionButton.extended(
                 elevation: 0.0,
                 icon: Icon(
@@ -137,10 +86,7 @@ class _StartState extends State<Start> {
               ),
             ),
           ),
-
           SizedBox(height: 8.0),
-
-          /////Already in session ---> Stop()/////
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -170,35 +116,22 @@ class _StartState extends State<Start> {
     );
   }
 
-  ////////////getLabs API////////////
-  void getLabs() async {
-    var response = await CallAPi().getData('getLabs');
-    var body = json.decode(response.body);
-    setState(() {
-      labs = body;
-    });
-  }
-
-//////////Scanning QrCode operation///////////
+/*Handles scanning of an asset */
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
 
-      //Assign the scanned value to a variable//
       setState(() async {
         this.barcode = barcode;
 
-        //Store the value to localstorage//
+        /*Store the value to localstorage */
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.setString('barcodeKey', barcode);
-        localStorage.setString('labKey', _lab);
 
-        //Navigate to the start button//
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => StartButton()),
         );
-
       });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
@@ -250,40 +183,25 @@ class _StartState extends State<Start> {
     }
   }
 
-  ///////Handles the exit alert dialog//////
-  _onExitApp(context) {
-    Alert(
+  /* Handles the exit alert dialog */
+  void alert() {
+    showDialog<void>(
         context: context,
-        type: AlertType.warning,
-        title: "Are you sure you want to quit application?",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "Yes",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () async {
-              //Navigate to the login page//
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Login()),
-              );
-
-              //Remove user from localstorage//
-              SharedPreferences localStorage =
-                  await SharedPreferences.getInstance();
-              localStorage.remove('userKey');
-            },
-            color: Color(0xff01A0C7),
-          ),
-          DialogButton(
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            color: Colors.redAccent,
-          )
-        ]);
+        builder: (BuildContext context) {
+          return PlatformAlertDialog(
+              title: Center(child: Text('Exit Application')),
+              content: SingleChildScrollView(
+                child: Text("Are you sure you want to exit app ? ",
+                    style: TextStyle(fontSize: 17.0)),
+              ),
+              actions: <Widget>[
+                PlatformDialogAction(child: Text('YES'), onPressed: () {}),
+                PlatformDialogAction(
+                    child: Text('CANCEL'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    })
+              ]);
+        });
   }
 }
