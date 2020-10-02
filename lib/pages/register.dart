@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:assetracking/API/api.dart';
+import 'package:assetracking/pages/login.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,223 +14,208 @@ class _RegisterState extends State<Register> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  ///Styling for texts///
-  TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
-
-  ///Text Controllers///
-  TextEditingController userIdController = TextEditingController();
-  TextEditingController fnameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController idController = TextEditingController();
+  /*Text Controllers */
+  TextEditingController userId = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController surname = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController idNumber = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Registration",
-            style: style.copyWith(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-      ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(36.0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: registerForm(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-///////////Registration Form Widget/////////////
-  Widget registerForm() {
-    return Column(
-      children: <Widget>[
-        /////User id text field/////
-        TextFormField(
-          controller: userIdController,
-          obscureText: false,
-          style: style.copyWith(fontSize: 18),
-          keyboardType: TextInputType.text,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "User id is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "Adm No. or Employee Id",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////First Name text field/////
-        TextFormField(
-          controller: fnameController,
-          obscureText: false,
-          style: style,
-          keyboardType: TextInputType.text,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "First name is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "first name",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Surname text field/////
-        TextFormField(
-          controller: surnameController,
-          obscureText: false,
-          style: style,
-          keyboardType: TextInputType.text,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "Surname is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "surname",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Email text field/////
-        TextFormField(
-          controller: emailController,
-          obscureText: false,
-          style: style,
-          keyboardType: TextInputType.emailAddress,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "email address is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "email address",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Phone Number text field/////
-        TextFormField(
-          controller: phoneController,
-          obscureText: false,
-          style: style,
-          keyboardType: TextInputType.number,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "phone number is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "phone number",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Id Number text field/////
-        TextFormField(
-          controller: idController,
-          obscureText: false,
-          style: style,
-          keyboardType: TextInputType.number,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "id number is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "id number",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 25.0),
-
-        /////Registration button/////
-        Material(
-          elevation: 5.0,
-          borderRadius: BorderRadius.circular(30.0),
-          color: Color(0xff01A0C7),
-          child: MaterialButton(
-            minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            onPressed: _handleRegister,
-            child: Text(_isLoading ? 'Registering...' : "Register",
-                textAlign: TextAlign.center,
-                style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Already have an account ---> Login()/////
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Already have an account?",
-              style: TextStyle(color: Colors.black54),
-            ),
-            SizedBox(width: 10.0),
-            GestureDetector(
-              child: Text(
-                "Login",
+          padding: const EdgeInsets.symmetric(vertical: 60.0),
+          child: Column(
+            children: [
+              Text(
+                "Create Account",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff01A0C7),
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff01A0C7)),
+              ),
+              Text(
+                "Create a new account",
+                style: TextStyle(color: Colors.grey[700]),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 30.0, horizontal: 45.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: userId,
+                        decoration: InputDecoration(
+                          labelText: "ADM NO OR EMPLOYEE ID",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "THIS field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: firstName,
+                        decoration: InputDecoration(
+                          labelText: "FIRST NAME",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "FIRST NAME field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: surname,
+                        decoration: InputDecoration(
+                          labelText: "SURNAME",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "SURNAME field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: idNumber,
+                        decoration: InputDecoration(
+                          labelText: "ID NUMBER",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "ID NUMBER field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: phone,
+                        decoration: InputDecoration(
+                          labelText: "PHONE",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "PHONE field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: email,
+                        decoration: InputDecoration(
+                          labelText: "EMAIL",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff01A0C7))),
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "EMAIL field cannot be blank";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 75.0),
+                      Container(
+                        height: 50.0,
+                        child: GestureDetector(
+                          child: Material(
+                            borderRadius: BorderRadius.circular(5.0),
+                            shadowColor: Colors.red,
+                            color: Color(0xff01A0C7),
+                            elevation: 5.0,
+                            child: GestureDetector(
+                              child: Center(
+                                child: Text(
+                                  _isLoading ? 'REGISTERING..' : 'REGISTER',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Source Sans Pro'),
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: _handleRegister,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account? "),
+                  InkWell(
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                          color: Color(0xff01A0C7),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 
@@ -241,12 +227,12 @@ class _RegisterState extends State<Register> {
 
       //User data to be pushed to db//
       var data = {
-        'id': userIdController.text,
-        'fname': fnameController.text,
-        'surname': surnameController.text,
-        'email': emailController.text,
-        'phoneNumber': phoneController.text,
-        'idNumber': idController.text,
+        'id': userId.text,
+        'fname': firstName.text,
+        'surname': surname.text,
+        'email': email.text,
+        'phoneNumber': phone.text,
+        'idNumber': idNumber.text,
       };
 
       //Set the registration button to loading state//
