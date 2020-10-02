@@ -26,20 +26,21 @@ class _StartButtonState extends State<StartButton> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          title: Text(
-            "Start Button",
-            style: style.copyWith(fontWeight: FontWeight.bold),
-          ),
+        title: Text(
+          "Start Button",
+          style: style.copyWith(fontWeight: FontWeight.bold),
+        ),
       ),
       body:
-        /////Start button/////
-        Center(
+          /////Start button/////
+          Center(
         child: Container(
           width: 250.0,
           height: 50.0,
           child: FloatingActionButton.extended(
             elevation: 0.0,
-            label: Text(_isLoading ? "Starting.." : "Start",
+            label: Text(
+              _isLoading ? "Starting.." : "Start",
               style: style.copyWith(fontWeight: FontWeight.bold),
             ),
             onPressed: startSession,
@@ -62,7 +63,6 @@ class _StartButtonState extends State<StartButton> {
     lab = localStorage.getString('labKey');
     barcode = localStorage.getString('barcodeKey');
 
-
     var data = {
       'id': id,
       'barcode': barcode,
@@ -81,7 +81,6 @@ class _StartButtonState extends State<StartButton> {
           builder: (context) => Stop(),
         ),
       );
-
 
       //Redirect with success message//
       Flushbar(

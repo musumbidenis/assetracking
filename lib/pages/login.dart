@@ -16,201 +16,212 @@ class _LoginState extends State<Login> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-//Styling for texts//
-  TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
-
-//Text Controllers//
+  /*Text Controllers */
   TextEditingController userIdController = TextEditingController();
   TextEditingController idController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title:
-            Text("Login", style: style.copyWith(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(36, 0, 36, 0),
-            child: SingleChildScrollView(
-                child: Form(
-              key: _formKey,
-              child: loginForm(),
-            )),
-          ),
-        ),
-      ),
-    );
-  }
-
-////////////Login Form Widget////////////
-  Widget loginForm() {
-    return Column(
-      children: <Widget>[
-        /////User id Number text field/////
-        TextFormField(
-          controller: userIdController,
-          obscureText: false,
-          style: style.copyWith(fontSize: 18),
-          keyboardType: TextInputType.text,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "User id is required";
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "Adm No. or Employee Id",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Id Number text field/////
-        TextFormField(
-          controller: idController,
-          obscureText: true,
-          style: style,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return "Id number required";
-            } else {
-              return null;
-            }
-          },
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "id number",
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))),
-        ),
-
-        SizedBox(height: 25.0),
-
-        /////Login button/////
-        Material(
-          elevation: 5.0,
-          borderRadius: BorderRadius.circular(30.0),
-          color: Color(0xff01A0C7),
-          child: MaterialButton(
-            minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            onPressed: _handleLogin,
-            child: Text(_isLoading ? "Loging..." : "Login",
-                textAlign: TextAlign.center,
-                style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-        ),
-
-        SizedBox(height: 15.0),
-
-        /////Don't have an account ---> Register()/////
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Dont have an account?",
-              style: TextStyle(color: Colors.black54),
-            ),
-            SizedBox(width: 10.0),
-            GestureDetector(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 150.0),
               child: Text(
-                "Register",
+                "Sign In",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff01A0C7),
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff01A0C7)),
+              ),
+            ),
+            Text(
+              "Sign in to continue",
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 45.0, right: 45.0, top: 50.0, bottom: 30.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextFormField(
+                      controller: userIdController,
+                      decoration: InputDecoration(
+                        labelText: "ADM NUMBER OR EMPLOYEE ID",
+                        labelStyle: TextStyle(
+                          fontFamily: 'Source Sans Pro',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[400],
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff01A0C7),
+                        )),
+                      ),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "This field cannot be blank";
+                        }
+                      },
+                    ),
+                    SizedBox(height: 8.0),
+                    TextFormField(
+                      controller: idController,
+                      decoration: InputDecoration(
+                        labelText: "ID NUMBER",
+                        labelStyle: TextStyle(
+                          fontFamily: 'Source Sans Pro',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[400],
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Color(0xff01A0C7),
+                        )),
+                      ),
+                      obscureText: true,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "ID NUMBER field cannot be blank";
+                        }
+                      },
+                    ),
+                    SizedBox(height: 30.0),
+                    Text(
+                      "Forgot password?",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff01A0C7)),
+                    ),
+                    SizedBox(height: 30.0),
+                    Container(
+                      height: 50.0,
+                      child: GestureDetector(
+                        child: Material(
+                          borderRadius: BorderRadius.circular(5.0),
+                          shadowColor: Colors.red,
+                          color: Color(0xff01A0C7),
+                          elevation: 5.0,
+                          child: GestureDetector(
+                            child: Center(
+                              child: Text(
+                                _isLoading ? 'LOGING..' : 'LOGIN',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Source Sans Pro'),
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: _handleLogin,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Register()));
-              },
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Don\'t have an account? "),
+                InkWell(
+                  child: Text(
+                    "Register",
+                    style: TextStyle(
+                        color: Color(0xff01A0C7), fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Register()));
+                  },
+                ),
+              ],
+            )
           ],
         ),
-      ],
+      ),
     );
   }
 
-////////////Handling login authetication/////////////
+/*Handles form submission */
   void _handleLogin() async {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-    }
 
-    //Data to be cross-checked in the db//
-    var data = {
-      'id': userIdController.text,
-      'idNumber': idController.text,
-    };
+      /*Data to be cross-checked in the db */
+      var data = {
+        'id': userIdController.text,
+        'idNumber': idController.text,
+      };
 
-    //Set the login button to loading state//
-    setState(() {
-      _isLoading = true;
-    });
-
-    //Cross-check data in the db via API//
-    var response = await CallAPi().postData(data, 'login');
-    var body = json.decode(response.body);
-    if (body == 'success') {
-      //Save student admission in the localStorage//
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      await localStorage.setString('userKey', userIdController.text);
-      //Navigate to the homepage//
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Start()),
-      );
-
-      //Redirect with success message//
-      Flushbar(
-        message: 'Login successfull!',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.green,
-      )..show(context);
-
-      //Set loading state of button to false//
+      /*Set the login button to loading state */
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
 
-    } else {
-      //Navigate to the login page//
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Login(),
-        ),
-      );
+      /*verify login credentials provided */
+      var response = await CallAPi().postData(data, 'login');
+      var body = json.decode(response.body);
+      if (body == 'success') {
+        /*Save students admission in the localStorage */
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        await localStorage.setString('userKey', userIdController.text);
 
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Start()),
+        );
 
-      //Redirect with error message//
-      Flushbar(
-        message: 'Incorrect details!',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.redAccent,
-      )..show(context);
+        /*Success message */
+        Flushbar(
+          message: 'Login successfull!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green,
+        )..show(context);
+
+        /**Set loading state of button to false &&
+         * Clear the text fields
+        */
+        userIdController.clear();
+        idController.clear();
+
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        /**Set loading state of button to false &&
+         * Clear the text fields
+        */
+        userIdController.clear();
+        idController.clear();
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        /*Error message */
+        Flushbar(
+          message: 'Incorrect details!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.redAccent,
+        )..show(context);
+      }
     }
   }
 }
