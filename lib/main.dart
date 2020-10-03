@@ -14,13 +14,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _isLoggedIn = false;
 
-
   @override
-  void initState(){
+  void initState() {
     _checkIfLoggedIn();
     super.initState();
   }
-  
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -31,13 +30,14 @@ class _MyAppState extends State<MyApp> {
       home: _isLoggedIn ? Start() : Login(),
     );
   }
+
   //Check if user is logged in//
-  void _checkIfLoggedIn() async{
+  void _checkIfLoggedIn() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = localStorage.getString('userKey');
 
     //If !=null remain logged in//
-    if(user!=null){
+    if (user != null) {
       _isLoggedIn = true;
     }
   }

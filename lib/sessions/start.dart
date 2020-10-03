@@ -87,6 +87,30 @@ class _StartState extends State<Start> {
             ),
           ),
           SizedBox(height: 8.0),
+          Container(
+            height: 50.0,
+            child: GestureDetector(
+              child: Material(
+                borderRadius: BorderRadius.circular(5.0),
+                shadowColor: Colors.blue,
+                color: Color(0xff01A0C7),
+                elevation: 5.0,
+                child: GestureDetector(
+                  child: Center(
+                    child: Text(
+                      'Start',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Source Sans Pro'),
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {},
+            ),
+          ),
+          SizedBox(height: 8.0),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -105,8 +129,8 @@ class _StartState extends State<Start> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Stop()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => StartButton()));
                 },
               ),
             ],

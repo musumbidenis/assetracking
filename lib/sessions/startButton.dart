@@ -13,12 +13,11 @@ class StartButton extends StatefulWidget {
 
 class _StartButtonState extends State<StartButton> {
   bool _isLoading = false;
+  bool _isDisabled = true;
 
   String id;
   String barcode;
-  String lab;
 
-  ///Styling for texts///
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
   @override
@@ -31,9 +30,7 @@ class _StartButtonState extends State<StartButton> {
           style: style.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-      body:
-          /////Start button/////
-          Center(
+      body: Center(
         child: Container(
           width: 250.0,
           height: 50.0,
@@ -43,38 +40,38 @@ class _StartButtonState extends State<StartButton> {
               _isLoading ? "Starting.." : "Start",
               style: style.copyWith(fontWeight: FontWeight.bold),
             ),
-            onPressed: startSession,
+            onPressed: _isDisabled ? null : startSession,
           ),
         ),
       ),
     );
   }
 
-//////Handles initialization of session////////
+/*Handles session initialization */
   Future startSession() async {
-    //Set button state to loading//
     setState(() {
       _isLoading = true;
+      _isDisabled = false;
     });
 
-    //Send data to db//
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id = localStorage.getString('userKey');
-    lab = localStorage.getString('labKey');
     barcode = localStorage.getString('barcodeKey');
 
     var data = {
       'id': id,
       'barcode': barcode,
-      'lab': lab,
     };
 
-    //Post Start Session data to db via API//
+    /*Sends data to database */
     var response = await CallAPi().postData(data, 'start');
     var body = json.decode(response.body);
-    print(body);
+
     if (body == 'success') {
-      //Navigate to stop page//
+      setState(() {
+        _isLoading = false;
+      });
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -82,7 +79,7 @@ class _StartButtonState extends State<StartButton> {
         ),
       );
 
-      //Redirect with success message//
+      /* Success message */
       Flushbar(
         message: 'Session started successfully!',
         icon: Icon(
@@ -94,20 +91,19 @@ class _StartButtonState extends State<StartButton> {
         backgroundColor: Colors.greenAccent,
       )..show(context);
     } else {
-      //Set button loading state to false//
       setState(() {
         _isLoading = false;
       });
 
-      //Redirect with error message//
+      /* Error message */
       Flushbar(
-        message: 'Session not started.Please try again!',
+        message: 'Asset not valid. Please choose a valid asset in record!',
         icon: Icon(
           Icons.info_outline,
           size: 28,
           color: Colors.white,
         ),
-        duration: Duration(seconds: 30),
+        duration: Duration(seconds: 8),
         backgroundColor: Colors.redAccent,
       )..show(context);
     }
