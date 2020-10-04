@@ -13,7 +13,6 @@ class StartButton extends StatefulWidget {
 
 class _StartButtonState extends State<StartButton> {
   bool _isLoading = false;
-  bool _isDisabled = true;
 
   String id;
   String barcode;
@@ -40,7 +39,7 @@ class _StartButtonState extends State<StartButton> {
               _isLoading ? "Starting.." : "Start",
               style: style.copyWith(fontWeight: FontWeight.bold),
             ),
-            onPressed: _isDisabled ? null : startSession,
+            onPressed: startSession,
           ),
         ),
       ),
@@ -51,7 +50,6 @@ class _StartButtonState extends State<StartButton> {
   Future startSession() async {
     setState(() {
       _isLoading = true;
-      _isDisabled = false;
     });
 
     SharedPreferences localStorage = await SharedPreferences.getInstance();
