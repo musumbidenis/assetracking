@@ -12,7 +12,6 @@ class Stop extends StatefulWidget {
 }
 
 class _StopState extends State<Stop> {
-  ///Styling for texts///
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
   String barcode = "";
@@ -22,87 +21,76 @@ class _StopState extends State<Stop> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-            title: Text(
-              "Stop Session",
-              style: style.copyWith(fontWeight: FontWeight.bold),
-            ),
+          backgroundColor: Color(0xff01A0C7),
+          title: Text(
+            "Stop Session",
+            style: style.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
         body: Center(
           child: SingleChildScrollView(
-            child: stopScreen(),
-          ),
+              child: Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 35),
+                  child: Center(
+                    child: Text("Stop current laboratory session",
+                        style: style.copyWith(
+                          color: Color(0xff01A0C7),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+                SizedBox(height: 35.0),
+                Center(
+                  child: Container(
+                    width: 250,
+                    height: 50.0,
+                    child: FloatingActionButton.extended(
+                      backgroundColor: Color(0xff01A0C7),
+                      elevation: 0.0,
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 30.0,
+                      ),
+                      label: Text(
+                        "Scan",
+                        style: style.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: scan,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
         ));
-  }
-
-////////////Dropdown button for choosing courses/////////////
-  Widget stopScreen() {
-    return Container(
-      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 35),
-            child: Center(
-              child: Text("Stop current laboratory session",
-                  style: style.copyWith(
-                    color: Color(0xff01A0C7),
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
-          ),
-
-          SizedBox(height: 35.0),
-
-          /////Scan button/////
-          Center(
-            child: Container(
-              width: 250,
-              height: 50.0,
-              child: FloatingActionButton.extended(
-                elevation: 0.0,
-                icon: Icon(
-                  Icons.camera_alt,
-                  size: 30.0,
-                ),
-                label: Text(
-                  "Scan",
-                  style: style.copyWith(fontWeight: FontWeight.bold),
-                ),
-                onPressed: scan,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
-
-      //Assign the scanned value to a variable//
       setState(() {
         this.barcode = barcode;
       });
 
-      //Get the asset code stored in localstorage//
+      /*Gets the asset code stored in localstorage */
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       var barcode2 = localStorage.getString('barcodeKey');
 
-      //Cross-check stored value to scanned value//
       if (barcode2 == barcode) {
-        //True ==> redirect to stop button//
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => StopButton()),
         );
       } else {
-        //False ==> redirect with error message//
+        /*Error message */
         Flushbar(
-          message: 'Scanned wrong asset!',
+          message: 'This is not the asset registered for this session!',
           icon: Icon(
             Icons.info_outline,
             size: 28,
@@ -165,5 +153,4 @@ class _StopState extends State<Stop> {
       )..show(context);
     }
   }
-
 }

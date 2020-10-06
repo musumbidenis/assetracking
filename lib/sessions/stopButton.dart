@@ -17,7 +17,6 @@ class _StopButtonState extends State<StopButton> {
   String barcode;
   String lab;
 
-  ///Styling for texts///
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
   @override
@@ -25,39 +24,60 @@ class _StopButtonState extends State<StopButton> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          title: Text(
-            "Stop Button",
-            style: style.copyWith(fontWeight: FontWeight.bold),
-          ),
+        backgroundColor: Color(0xff01A0C7),
+        title: Text(
+          "Stop Button",
+          style: style.copyWith(fontWeight: FontWeight.bold),
+        ),
       ),
-      body:
-          /////Stop button/////
-          Center(
-        child: Container(
-          width: 250.0,
-          height: 50.0,
-          child: FloatingActionButton.extended(
-            elevation: 0.0,
-            label: Text(_isLoading ? "Stopping.." : "Stop",
-              style: style.copyWith(fontWeight: FontWeight.bold),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 35),
+                  child: Center(
+                    child: Text("Click stop button to terminate session",
+                        style: style.copyWith(
+                          color: Color(0xff01A0C7),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: FloatingActionButton.extended(
+                      backgroundColor: Color(0xff01A0C7),
+                      elevation: 0.0,
+                      label: Text(
+                        "Start",
+                        style: style.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: stopSession,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onPressed: stopSession,
           ),
         ),
       ),
     );
   }
 
-
-//////Handles termination of session////////
+/*Handles termination of a session */
   Future stopSession() async {
-    //Set button state to loading//
     setState(() {
       _isLoading = true;
     });
 
-
-    //Send data to db//
+    /*Gets data from local storage */
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id = localStorage.getString('userKey');
     barcode = localStorage.getString('barcodeKey');
@@ -67,12 +87,14 @@ class _StopButtonState extends State<StopButton> {
       'barcode': barcode,
     };
 
-    //Post Stop Session data to db via API//
+    /*Sends data to database */
     var response = await CallAPi().postData(data, 'stop');
     var body = json.decode(response.body);
-    print(body);
     if (body == 'success') {
-      //Navigate the start page//
+      setState(() {
+        _isLoading = false;
+      });
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -80,11 +102,11 @@ class _StopButtonState extends State<StopButton> {
         ),
       );
 
-      //Remove asset from localstorage//
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-          localStorage.remove('barcodeKey');
+      /*Remove asset from localstorage */
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('barcodeKey');
 
-      //Redirect with success message//
+      /*Success message */
       Flushbar(
         message: 'Session terminated successfully!',
         icon: Icon(
@@ -96,12 +118,11 @@ class _StopButtonState extends State<StopButton> {
         backgroundColor: Colors.greenAccent,
       )..show(context);
     } else {
-      //Set button loading state to false//
       setState(() {
         _isLoading = false;
       });
 
-      //Redirect with error message//
+      /*Error message */
       Flushbar(
         message: 'Session did not terminate!',
         icon: Icon(

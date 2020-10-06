@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: _isLoggedIn ? Start() : Login(),
+      home: _isLoggedIn ? Start() : Start(),
     );
   }
 

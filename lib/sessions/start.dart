@@ -1,5 +1,6 @@
 import 'package:assetracking/sessions/startButton.dart';
 import 'package:assetracking/sessions/stop.dart';
+import 'package:assetracking/sessions/stopButton.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,6 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-  bool _isVisible = true;
-
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
   String barcode = "";
@@ -65,55 +64,21 @@ class _StartState extends State<Start> {
                     ),
                   ),
                   SizedBox(height: 20.0),
-                  // FloatingActionButton.extended(
-                  //   backgroundColor: Color(0xff01A0C7),
-                  //   elevation: 0.0,
-                  //   label: Text(
-                  //     "HIDE",
-                  //     style: style.copyWith(fontWeight: FontWeight.bold),
-                  //   ),
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       _isVisible = !_isVisible;
-                  //     });
-                  //   },
-                  // ),
                   Center(
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.75,
-                      child: Visibility(
-                        visible: _isVisible,
-                        child: FloatingActionButton.extended(
-                          backgroundColor: Color(0xff01A0C7),
-                          elevation: 0.0,
-                          icon: Icon(
-                            Icons.camera_alt,
-                            size: 30.0,
-                          ),
-                          label: Text(
-                            "Scan",
-                            style: style.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isVisible = !_isVisible;
-                            });
-                            scan();
-                          },
+                      child: FloatingActionButton.extended(
+                        backgroundColor: Color(0xff01A0C7),
+                        elevation: 0.0,
+                        icon: Icon(
+                          Icons.camera_alt,
+                          size: 30.0,
                         ),
-                        // replacement: FloatingActionButton.extended(
-                        //   backgroundColor: Color(0xff01A0C7),
-                        //   elevation: 0.0,
-                        //   icon: Icon(
-                        //     Icons.straighten,
-                        //     size: 30.0,
-                        //   ),
-                        //   label: Text(
-                        //     "Start",
-                        //     style: style.copyWith(fontWeight: FontWeight.bold),
-                        //   ),
-                        //   onPressed: null,
-                        // ),
+                        label: Text(
+                          "Scan",
+                          style: style.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: scan,
                       ),
                     ),
                   ),
@@ -139,7 +104,7 @@ class _StartState extends State<Start> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => StartButton()));
+                                  builder: (context) => StopButton()));
                         },
                       ),
                     ],
@@ -163,7 +128,8 @@ class _StartState extends State<Start> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.setString('barcodeKey', barcode);
 
-        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => StartButton()));
       });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
@@ -201,10 +167,6 @@ class _StartState extends State<Start> {
         duration: Duration(seconds: 3),
         backgroundColor: Colors.red,
       )..show(context);
-
-      setState(() {
-        _isVisible = _isVisible;
-      });
     } catch (e) {
       Flushbar(
         message: 'Unkown error, please try again',

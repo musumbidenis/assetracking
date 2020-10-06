@@ -24,22 +24,47 @@ class _StartButtonState extends State<StartButton> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Color(0xff01A0C7),
         title: Text(
           "Start Button",
           style: style.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(
-        child: Container(
-          width: 250.0,
-          height: 50.0,
-          child: FloatingActionButton.extended(
-            elevation: 0.0,
-            label: Text(
-              _isLoading ? "Starting.." : "Start",
-              style: style.copyWith(fontWeight: FontWeight.bold),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 35),
+                  child: Center(
+                    child: Text("Click start button to begin session",
+                        style: style.copyWith(
+                          color: Color(0xff01A0C7),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: FloatingActionButton.extended(
+                      backgroundColor: Color(0xff01A0C7),
+                      elevation: 0.0,
+                      label: Text(
+                        "Start",
+                        style: style.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: startSession,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onPressed: startSession,
           ),
         ),
       ),
