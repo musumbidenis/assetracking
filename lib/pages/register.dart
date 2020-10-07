@@ -51,10 +51,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: userId,
                         decoration: InputDecoration(
-                          labelText: "ADM NO OR EMPLOYEE ID",
+                          labelText: "Admission Number Or Employee ID",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -62,7 +61,7 @@ class _RegisterState extends State<Register> {
                         ),
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "THIS field cannot be blank";
+                            return "This field cannot be blank";
                           }
                         },
                       ),
@@ -70,10 +69,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: firstName,
                         decoration: InputDecoration(
-                          labelText: "FIRST NAME",
+                          labelText: "First Name",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -82,7 +80,7 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "FIRST NAME field cannot be blank";
+                            return "First Name field cannot be blank";
                           }
                         },
                       ),
@@ -90,10 +88,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: surname,
                         decoration: InputDecoration(
-                          labelText: "SURNAME",
+                          labelText: "Surname",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -102,7 +99,7 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "SURNAME field cannot be blank";
+                            return "Surname field cannot be blank";
                           }
                         },
                       ),
@@ -110,10 +107,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: idNumber,
                         decoration: InputDecoration(
-                          labelText: "ID NUMBER",
+                          labelText: "ID Number",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -122,7 +118,7 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.number,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "ID NUMBER field cannot be blank";
+                            return "ID Number field cannot be blank";
                           }
                         },
                       ),
@@ -130,10 +126,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: phone,
                         decoration: InputDecoration(
-                          labelText: "PHONE",
+                          labelText: "Phone",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -142,7 +137,7 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.phone,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "PHONE field cannot be blank";
+                            return "Phone field cannot be blank";
                           }
                         },
                       ),
@@ -150,10 +145,9 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: email,
                         decoration: InputDecoration(
-                          labelText: "EMAIL",
+                          labelText: "Email",
                           labelStyle: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey[400],
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -162,7 +156,7 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return "EMAIL field cannot be blank";
+                            return "Email field cannot be blank";
                           }
                         },
                       ),

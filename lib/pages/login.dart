@@ -51,10 +51,9 @@ class _LoginState extends State<Login> {
                     TextFormField(
                       controller: userIdController,
                       decoration: InputDecoration(
-                        labelText: "ADM NUMBER OR EMPLOYEE ID",
+                        labelText: "Admission Number Or Employee ID",
                         labelStyle: TextStyle(
                           fontFamily: 'Source Sans Pro',
-                          fontWeight: FontWeight.bold,
                           color: Colors.grey[400],
                         ),
                         focusedBorder: UnderlineInputBorder(
@@ -72,10 +71,9 @@ class _LoginState extends State<Login> {
                     TextFormField(
                       controller: idController,
                       decoration: InputDecoration(
-                        labelText: "ID NUMBER",
+                        labelText: "ID Number",
                         labelStyle: TextStyle(
                           fontFamily: 'Source Sans Pro',
-                          fontWeight: FontWeight.bold,
                           color: Colors.grey[400],
                         ),
                         focusedBorder: UnderlineInputBorder(
@@ -86,7 +84,7 @@ class _LoginState extends State<Login> {
                       obscureText: true,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return "ID NUMBER field cannot be blank";
+                          return "ID Number field cannot be blank";
                         }
                       },
                     ),
