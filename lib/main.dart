@@ -27,18 +27,20 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: _isLoggedIn ? Start() : Start(),
+      home: _isLoggedIn ? Start() : Login(),
     );
   }
 
-  //Check if user is logged in//
+  /*Check if user is logged in */
   void _checkIfLoggedIn() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = localStorage.getString('userKey');
 
-    //If !=null remain logged in//
+    /*If !=null remain logged in */
     if (user != null) {
-      _isLoggedIn = true;
+      setState(() {
+        _isLoggedIn = true;
+      });
     }
   }
 }

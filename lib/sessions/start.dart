@@ -101,10 +101,8 @@ class _StartState extends State<Start> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StopButton()));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Stop()));
                         },
                       ),
                     ],
@@ -193,7 +191,19 @@ class _StartState extends State<Start> {
                     style: TextStyle(fontSize: 17.0)),
               ),
               actions: <Widget>[
-                PlatformDialogAction(child: Text('YES'), onPressed: () {}),
+                PlatformDialogAction(
+                    child: Text('YES'),
+                    onPressed: () async {
+                      /*Store the value to localstorage */
+                      SharedPreferences localStorage =
+                          await SharedPreferences.getInstance();
+                      localStorage.clear();
+
+                      Navigator.of(context).pop();
+
+                      SystemChannels.platform
+                          .invokeMethod('SystemNavigator.pop');
+                    }),
                 PlatformDialogAction(
                     child: Text('CANCEL'),
                     onPressed: () {

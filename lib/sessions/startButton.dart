@@ -56,7 +56,7 @@ class _StartButtonState extends State<StartButton> {
                       backgroundColor: Color(0xff01A0C7),
                       elevation: 0.0,
                       label: Text(
-                        "Start",
+                        _isLoading ? 'Starting...' : 'Start',
                         style: style.copyWith(fontWeight: FontWeight.bold),
                       ),
                       onPressed: startSession,
@@ -89,8 +89,51 @@ class _StartButtonState extends State<StartButton> {
     /*Sends data to database */
     var response = await CallAPi().postData(data, 'start');
     var body = json.decode(response.body);
+    print(body);
 
-    if (body == 'success') {
+    if (body == 'asset does not exist') {
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.of(context).pop();
+
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('barcodeKey');
+
+      /* Error message */
+      Flushbar(
+        message: 'Asset does not exist. Please choose a valid asset in record!',
+        icon: Icon(
+          Icons.info_outline,
+          size: 28,
+          color: Colors.white,
+        ),
+        duration: Duration(seconds: 8),
+        backgroundColor: Colors.redAccent,
+      )..show(context);
+    } else if (body == 'asset not signed off') {
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.of(context).pop();
+
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('barcodeKey');
+
+      /* Error message */
+      Flushbar(
+        message: 'Asset has not been signed out. Please contact lab admin!',
+        icon: Icon(
+          Icons.info_outline,
+          size: 28,
+          color: Colors.white,
+        ),
+        duration: Duration(seconds: 8),
+        backgroundColor: Colors.redAccent,
+      )..show(context);
+    } else {
       setState(() {
         _isLoading = false;
       });
@@ -102,6 +145,9 @@ class _StartButtonState extends State<StartButton> {
         ),
       );
 
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('barcodeKey');
+
       /* Success message */
       Flushbar(
         message: 'Session started successfully!',
@@ -112,22 +158,6 @@ class _StartButtonState extends State<StartButton> {
         ),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.greenAccent,
-      )..show(context);
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-
-      /* Error message */
-      Flushbar(
-        message: 'Asset not valid. Please choose a valid asset in record!',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 8),
-        backgroundColor: Colors.redAccent,
       )..show(context);
     }
   }

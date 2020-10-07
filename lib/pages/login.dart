@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
                       child: GestureDetector(
                         child: Material(
                           borderRadius: BorderRadius.circular(5.0),
-                          shadowColor: Colors.red,
+                          shadowColor: Colors.blue,
                           color: Color(0xff01A0C7),
                           elevation: 5.0,
                           child: GestureDetector(

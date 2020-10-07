@@ -56,7 +56,7 @@ class _StopButtonState extends State<StopButton> {
                       backgroundColor: Color(0xff01A0C7),
                       elevation: 0.0,
                       label: Text(
-                        "Start",
+                        _isLoading ? 'Stopping...' : 'Stop',
                         style: style.copyWith(fontWeight: FontWeight.bold),
                       ),
                       onPressed: stopSession,
@@ -90,7 +90,30 @@ class _StopButtonState extends State<StopButton> {
     /*Sends data to database */
     var response = await CallAPi().postData(data, 'stop');
     var body = json.decode(response.body);
-    if (body == 'success') {
+
+    if (body == 'youre not signed in for this asset') {
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.of(context).pop();
+
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('barcodeKey');
+
+      /* Error message */
+      Flushbar(
+        message:
+            'Youve not signed in for this asset. Please scan the correct asset!',
+        icon: Icon(
+          Icons.info_outline,
+          size: 28,
+          color: Colors.white,
+        ),
+        duration: Duration(seconds: 8),
+        backgroundColor: Colors.redAccent,
+      )..show(context);
+    } else {
       setState(() {
         _isLoading = false;
       });
@@ -116,22 +139,6 @@ class _StopButtonState extends State<StopButton> {
         ),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.greenAccent,
-      )..show(context);
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-
-      /*Error message */
-      Flushbar(
-        message: 'Session did not terminate!',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.redAccent,
       )..show(context);
     }
   }

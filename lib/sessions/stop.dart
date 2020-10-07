@@ -78,28 +78,14 @@ class _StopState extends State<Stop> {
         this.barcode = barcode;
       });
 
-      /*Gets the asset code stored in localstorage */
+      /*Sets the asset code stored in localstorage */
       SharedPreferences localStorage = await SharedPreferences.getInstance();
-      var barcode2 = localStorage.getString('barcodeKey');
+      localStorage.setString('barcodeKey', barcode);
 
-      if (barcode2 == barcode) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => StopButton()),
-        );
-      } else {
-        /*Error message */
-        Flushbar(
-          message: 'This is not the asset registered for this session!',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 3),
-          backgroundColor: Colors.red,
-        )..show(context);
-      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => StopButton()),
+      );
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         Flushbar(
