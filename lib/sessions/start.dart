@@ -1,6 +1,5 @@
 import 'package:assetracking/sessions/startButton.dart';
 import 'package:assetracking/sessions/stop.dart';
-import 'package:assetracking/sessions/stopButton.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -45,69 +44,77 @@ class _StartState extends State<Start> {
                 ),
               ),
             ]),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 35),
-                    child: Center(
-                      child: Text("Start a new laboratory session",
-                          style: style.copyWith(
-                            color: Color(0xff01A0C7),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      child: FloatingActionButton.extended(
-                        backgroundColor: Color(0xff01A0C7),
-                        elevation: 0.0,
-                        icon: Icon(
-                          Icons.camera_alt,
-                          size: 30.0,
-                        ),
-                        label: Text(
-                          "Scan",
-                          style: style.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: scan,
+        body: WillPopScope(
+          // ignore: missing_return
+          onWillPop: () {
+            alert();
+          },
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 35),
+                      child: Center(
+                        child: Text("Start a new laboratory session",
+                            style: style.copyWith(
+                              color: Color(0xff01A0C7),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            )),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Already in a laboratory session?",
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      SizedBox(width: 5.0),
-                      GestureDetector(
-                        child: Text(
-                          "Stop",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff01A0C7),
+                    SizedBox(height: 20.0),
+                    Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        child: FloatingActionButton.extended(
+                          backgroundColor: Color(0xff01A0C7),
+                          elevation: 0.0,
+                          icon: Icon(
+                            Icons.camera_alt,
+                            size: 30.0,
                           ),
+                          label: Text(
+                            "Scan",
+                            style: style.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: scan,
                         ),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Stop()));
-                        },
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(height: 8.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Already in a laboratory session?",
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                        SizedBox(width: 5.0),
+                        GestureDetector(
+                          child: Text(
+                            "Stop",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff01A0C7),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Stop()));
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -180,15 +187,15 @@ class _StartState extends State<Start> {
   }
 
   /* Handles the exit alert dialog */
-  void alert() {
+  alert() {
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return PlatformAlertDialog(
               title: Center(child: Text('Exit Application')),
               content: SingleChildScrollView(
-                child: Text("Are you sure you want to exit app ? ",
-                    style: TextStyle(fontSize: 17.0)),
+                child: Text("Are you sure you want to exit application ? ",
+                    style: TextStyle(fontSize: 18.0)),
               ),
               actions: <Widget>[
                 PlatformDialogAction(

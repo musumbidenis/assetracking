@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 45.0, right: 45.0, top: 50.0, bottom: 30.0),
+                  left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -61,6 +61,7 @@ class _LoginState extends State<Login> {
                           color: Color(0xff01A0C7),
                         )),
                       ),
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be blank";
@@ -82,6 +83,7 @@ class _LoginState extends State<Login> {
                         )),
                       ),
                       obscureText: true,
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "ID Number field cannot be blank";

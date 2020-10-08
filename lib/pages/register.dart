@@ -42,8 +42,8 @@ class _RegisterState extends State<Register> {
                 style: TextStyle(color: Colors.grey[700]),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 30.0, horizontal: 45.0),
+                padding: const EdgeInsets.only(
+                    left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -59,6 +59,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "This field cannot be blank";
@@ -78,6 +79,7 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         keyboardType: TextInputType.emailAddress,
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "First Name field cannot be blank";
@@ -97,6 +99,7 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         keyboardType: TextInputType.emailAddress,
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "Surname field cannot be blank";
@@ -116,6 +119,7 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         keyboardType: TextInputType.number,
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "ID Number field cannot be blank";
@@ -135,6 +139,7 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         keyboardType: TextInputType.phone,
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "Phone field cannot be blank";
@@ -154,13 +159,14 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         keyboardType: TextInputType.emailAddress,
+                        // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "Email field cannot be blank";
                           }
                         },
                       ),
-                      SizedBox(height: 75.0),
+                      SizedBox(height: 50.0),
                       Container(
                         height: 50.0,
                         child: GestureDetector(
