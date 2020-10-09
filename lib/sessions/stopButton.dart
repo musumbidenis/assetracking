@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/sessions/start.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StopButton extends StatefulWidget {
@@ -73,9 +75,37 @@ class _StopButtonState extends State<StopButton> {
 
 /*Handles termination of a session */
   Future stopSession() async {
-    setState(() {
-      _isLoading = true;
-    });
+    var connectionStatus =
+        (await Connectivity().checkConnectivity()).toString();
+
+    if (connectionStatus == "ConnectivityResult.none") {
+      setState(() {
+        _isLoading = false;
+      });
+      showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return PlatformAlertDialog(
+                title: Center(child: Text('')),
+                content: SingleChildScrollView(
+                  child: Text(
+                      "No Internet Connection available 😟 Please check your internet connection and try again.",
+                      style: TextStyle(fontSize: 16.0)),
+                ),
+                actions: <Widget>[
+                  PlatformDialogAction(
+                      child: Text('CANCEL'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      })
+                ]);
+          });
+    } else {
+      /*Sets button's loading state*/
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
     /*Gets data from local storage */
     SharedPreferences localStorage = await SharedPreferences.getInstance();

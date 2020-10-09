@@ -27,7 +27,7 @@ class CallAPi {
 }
 
 /*Checks if user has internet connection */
-checkConnectivity(context, String status) async {
+checkConnectivity(context, status) async {
   String connectionStatus;
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
   final Connectivity _connectivity = new Connectivity();

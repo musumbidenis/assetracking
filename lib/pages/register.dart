@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/pages/login.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -190,11 +192,12 @@ class _RegisterState extends State<Register> {
                             child: GestureDetector(
                               child: Center(
                                 child: Text(
-                                  _isLoading ? 'REGISTERING..' : 'REGISTER',
+                                  _isLoading ? 'REGISTERING...' : 'REGISTER',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'Source Sans Pro'),
+                                      fontFamily: 'Source Sans Pro',
+                                      letterSpacing: 2.0),
                                 ),
                               ),
                             ),
@@ -236,6 +239,9 @@ class _RegisterState extends State<Register> {
     if (form.validate()) {
       form.save();
 
+      var connectionStatus =
+          (await Connectivity().checkConnectivity()).toString();
+
       /*User data to be submitted */
       var data = {
         'id': userId.text,
@@ -246,10 +252,34 @@ class _RegisterState extends State<Register> {
         'idNumber': idNumber.text,
       };
 
-      /*Set the registration button to loading state */
-      setState(() {
-        _isLoading = true;
-      });
+      if (connectionStatus == "ConnectivityResult.none") {
+        setState(() {
+          _isLoading = false;
+        });
+        showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return PlatformAlertDialog(
+                  title: Center(child: Text('')),
+                  content: SingleChildScrollView(
+                    child: Text(
+                        "No Internet Connection available 😟 Please check your internet connection and try again.",
+                        style: TextStyle(fontSize: 16.0)),
+                  ),
+                  actions: <Widget>[
+                    PlatformDialogAction(
+                        child: Text('CANCEL'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                  ]);
+            });
+      } else {
+        /*Sets button's loading state*/
+        setState(() {
+          _isLoading = true;
+        });
+      }
 
       /*Handles posting user data */
       var response = await CallAPi().postData(data, 'register');
