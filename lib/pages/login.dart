@@ -84,11 +84,14 @@ class _LoginState extends State<Login> {
                         )),
                       ),
                       cursorColor: Color(0xff01A0C7),
+                      keyboardType: TextInputType.phone,
                       obscureText: true,
                       // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "ID Number field cannot be blank";
+                        } else if (value.length < 8 || value.length > 8) {
+                          return "ID Number cannot be less than or greater than eight";
                         }
                       },
                     ),

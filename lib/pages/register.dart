@@ -122,11 +122,13 @@ class _RegisterState extends State<Register> {
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
                         cursorColor: Color(0xff01A0C7),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.phone,
                         // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "ID Number field cannot be blank";
+                          } else if (value.length < 8 || value.length > 8) {
+                            return "ID Number cannot be less than or greater than eight";
                           }
                         },
                       ),
@@ -148,6 +150,8 @@ class _RegisterState extends State<Register> {
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "Phone field cannot be blank";
+                          } else if (value.length < 10 || value.length > 10) {
+                            return "Phone field cannot be less than or greater than ten";
                           }
                         },
                       ),
@@ -169,6 +173,8 @@ class _RegisterState extends State<Register> {
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "Email field cannot be blank";
+                          } else if (!value.contains("@")) {
+                            return "Please enter a valid email";
                           }
                         },
                       ),
