@@ -61,6 +61,7 @@ class _LoginState extends State<Login> {
                           color: Color(0xff01A0C7),
                         )),
                       ),
+                      cursorColor: Color(0xff01A0C7),
                       // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
@@ -82,6 +83,7 @@ class _LoginState extends State<Login> {
                           color: Color(0xff01A0C7),
                         )),
                       ),
+                      cursorColor: Color(0xff01A0C7),
                       obscureText: true,
                       // ignore: missing_return
                       validator: (String value) {
@@ -122,7 +124,7 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Don\'t have an account? "),
-                InkWell(
+                GestureDetector(
                   child: Text(
                     "Register",
                     style: TextStyle(
@@ -147,16 +149,27 @@ class _LoginState extends State<Login> {
     if (form.validate()) {
       form.save();
 
+      String status;
+
+      checkConnectivity(context, status);
+      print(status);
+
       /*Data to be cross-checked in the db */
       var data = {
         'id': userIdController.text,
         'idNumber': idController.text,
       };
 
-      /*Set the login button to loading state */
-      setState(() {
-        _isLoading = true;
-      });
+      /*Sets button's loading state*/
+      if (status == 'null') {
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = true;
+        });
+      }
 
       /*verify login credentials provided */
       var response = await CallAPi().postData(data, 'login');

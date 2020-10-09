@@ -59,6 +59,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         // ignore: missing_return
                         validator: (String value) {
                           if (value.isEmpty) {
@@ -78,6 +79,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         keyboardType: TextInputType.emailAddress,
                         // ignore: missing_return
                         validator: (String value) {
@@ -98,6 +100,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         keyboardType: TextInputType.emailAddress,
                         // ignore: missing_return
                         validator: (String value) {
@@ -118,6 +121,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         keyboardType: TextInputType.number,
                         // ignore: missing_return
                         validator: (String value) {
@@ -138,6 +142,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         keyboardType: TextInputType.phone,
                         // ignore: missing_return
                         validator: (String value) {
@@ -158,6 +163,7 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xff01A0C7))),
                         ),
+                        cursorColor: Color(0xff01A0C7),
                         keyboardType: TextInputType.emailAddress,
                         // ignore: missing_return
                         validator: (String value) {
@@ -198,7 +204,7 @@ class _RegisterState extends State<Register> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Already have an account? "),
-                  InkWell(
+                  GestureDetector(
                     child: Text(
                       "Login",
                       style: TextStyle(
@@ -206,8 +212,7 @@ class _RegisterState extends State<Register> {
                           fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
+                      Navigator.pop(context);
                     },
                   ),
                 ],

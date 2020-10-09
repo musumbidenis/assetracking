@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Asset Tracking',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xff01A0C7),
       ),
       home: _isLoggedIn ? Start() : Login(),
     );
