@@ -25,6 +25,7 @@ dependencies:
   flushbar: ^1.9.1
   platform_alert_dialog: ^1.0.0+2
   connectivity: ^0.4.9+3
+  flutter_offline: "^0.3.0"
 
 
   # The following adds the Cupertino Icons font to your application.

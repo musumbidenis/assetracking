@@ -3,6 +3,7 @@ import 'package:assetracking/API/api.dart';
 import 'package:assetracking/pages/register.dart';
 import 'package:assetracking/sessions/start.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flushbar/flushbar.dart';
@@ -25,125 +26,161 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 150.0),
-              child: Text(
-                "Sign In",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff01A0C7)),
+      body: OfflineBuilder(
+        debounceDuration: Duration.zero,
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          if (connectivity == ConnectivityResult.none) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.portable_wifi_off,
+                    size: 80.0,
+                    color: Color(0xff01A0C7),
+                  ),
+                  Text(
+                    'Oops,',
+                    style: TextStyle(fontSize: 19.0),
+                  ),
+                  Text(
+                    "No internet connection",
+                    style: TextStyle(fontSize: 17.0),
+                  ),
+                  Text(
+                    "Check your connection and try again",
+                    style: TextStyle(fontSize: 16.0),
+                  )
+                ],
               ),
-            ),
-            Text(
-              "Sign in to continue",
-              style: TextStyle(color: Colors.grey[700]),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextFormField(
-                      controller: userIdController,
-                      decoration: InputDecoration(
-                        labelText: "Admission Number Or Employee ID",
-                        labelStyle: TextStyle(
-                          fontFamily: 'Source Sans Pro',
-                          color: Colors.grey[400],
+            );
+          }
+          return child;
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 150.0),
+                child: Text(
+                  "Sign In",
+                  style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff01A0C7)),
+                ),
+              ),
+              Text(
+                "Sign in to continue",
+                style: TextStyle(color: Colors.grey[700]),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextFormField(
+                        controller: userIdController,
+                        decoration: InputDecoration(
+                          labelText: "Admission Number Or Employee ID",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Color(0xff01A0C7),
+                          )),
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Color(0xff01A0C7),
-                        )),
+                        cursorColor: Color(0xff01A0C7),
+                        // ignore: missing_return
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "This field cannot be blank";
+                          }
+                        },
                       ),
-                      cursorColor: Color(0xff01A0C7),
-                      // ignore: missing_return
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be blank";
-                        }
-                      },
-                    ),
-                    SizedBox(height: 8.0),
-                    TextFormField(
-                      controller: idController,
-                      decoration: InputDecoration(
-                        labelText: "ID Number",
-                        labelStyle: TextStyle(
-                          fontFamily: 'Source Sans Pro',
-                          color: Colors.grey[400],
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: idController,
+                        decoration: InputDecoration(
+                          labelText: "ID Number",
+                          labelStyle: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            color: Colors.grey[400],
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Color(0xff01A0C7),
+                          )),
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Color(0xff01A0C7),
-                        )),
+                        cursorColor: Color(0xff01A0C7),
+                        keyboardType: TextInputType.phone,
+                        obscureText: true,
+                        // ignore: missing_return
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "ID Number field cannot be blank";
+                          } else if (value.length < 8 || value.length > 8) {
+                            return "ID Number cannot be less than or greater than eight";
+                          }
+                        },
                       ),
-                      cursorColor: Color(0xff01A0C7),
-                      keyboardType: TextInputType.phone,
-                      obscureText: true,
-                      // ignore: missing_return
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "ID Number field cannot be blank";
-                        } else if (value.length < 8 || value.length > 8) {
-                          return "ID Number cannot be less than or greater than eight";
-                        }
-                      },
-                    ),
-                    SizedBox(height: 50.0),
-                    Container(
-                      height: 50.0,
-                      child: GestureDetector(
-                        child: Material(
-                          borderRadius: BorderRadius.circular(5.0),
-                          shadowColor: Colors.blue,
-                          color: Color(0xff01A0C7),
-                          elevation: 5.0,
-                          child: GestureDetector(
-                            child: Center(
-                              child: Text(
-                                _isLoading ? 'LOGING...' : 'LOGIN',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Source Sans Pro',
-                                    letterSpacing: 2.0),
+                      SizedBox(height: 50.0),
+                      Container(
+                        height: 50.0,
+                        child: GestureDetector(
+                          child: Material(
+                            borderRadius: BorderRadius.circular(5.0),
+                            shadowColor: Colors.blue,
+                            color: Color(0xff01A0C7),
+                            elevation: 5.0,
+                            child: GestureDetector(
+                              child: Center(
+                                child: Text(
+                                  _isLoading ? 'LOGING..' : 'LOGIN',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Source Sans Pro'),
+                                ),
                               ),
                             ),
                           ),
+                          onTap: _handleLogin,
                         ),
-                        onTap: _handleLogin,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Don\'t have an account? "),
-                GestureDetector(
-                  child: Text(
-                    "Register",
-                    style: TextStyle(
-                        color: Color(0xff01A0C7), fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Don\'t have an account? "),
+                  GestureDetector(
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                          color: Color(0xff01A0C7),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Register()));
+                    },
                   ),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Register()));
-                  },
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
