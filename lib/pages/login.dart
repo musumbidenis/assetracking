@@ -1,10 +1,10 @@
+import 'dart:io';
+import 'dart:async';
 import 'dart:convert';
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/pages/register.dart';
 import 'package:assetracking/sessions/start.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -43,17 +43,20 @@ class _LoginState extends State<Login> {
                     size: 80.0,
                     color: Color(0xff01A0C7),
                   ),
-                  Text(
-                    'Oops,',
-                    style: TextStyle(fontSize: 19.0),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      'Oops,',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
                   ),
                   Text(
                     "No internet connection",
-                    style: TextStyle(fontSize: 17.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
                   Text(
                     "Check your connection and try again",
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 18.0),
                   )
                 ],
               ),
@@ -192,96 +195,106 @@ class _LoginState extends State<Login> {
     if (form.validate()) {
       form.save();
 
-      var connectionStatus =
-          (await Connectivity().checkConnectivity()).toString();
-
       /*Data to be cross-checked in the db */
       var data = {
         'id': userIdController.text,
         'idNumber': idController.text,
       };
 
-      if (connectionStatus == "ConnectivityResult.none") {
-        showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return PlatformAlertDialog(
-                  title: Center(child: Text('')),
-                  content: SingleChildScrollView(
-                    child: Text(
-                        "No Internet Connection available 😟 Please check your internet connection and try again.",
-                        style: TextStyle(fontSize: 16.0)),
-                  ),
-                  actions: <Widget>[
-                    PlatformDialogAction(
-                        child: Text('CANCEL'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        })
-                  ]);
-            });
-      } else {
-        /*Sets button's loading state*/
-        setState(() {
-          _isLoading = true;
-        });
-      }
+      /*Sets button's loading state*/
+      setState(() {
+        _isLoading = true;
+      });
 
-      /*verify login credentials provided */
-      var response = await CallAPi().postData(data, 'login');
-      var body = json.decode(response.body);
-      if (body == 'success') {
-        /*Save students admission in the localStorage */
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-        await localStorage.setString('userKey', userIdController.text);
+      try {
+        /*verify login credentials provided */
+        var response = await CallAPi().postData(data, 'login');
+        var body = json.decode(response.body);
+        if (body == 'success') {
+          /*Save students admission in the localStorage */
+          SharedPreferences localStorage =
+              await SharedPreferences.getInstance();
+          await localStorage.setString('userKey', userIdController.text);
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Start()),
-        );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Start()),
+          );
 
-        /*Success message */
-        Flushbar(
-          message: 'Login successfull!',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 3),
-          backgroundColor: Colors.green,
-        )..show(context);
+          /*Success message */
+          Flushbar(
+            message: 'Login was successfull',
+            icon: Icon(
+              Icons.info_outline,
+              size: 28,
+              color: Colors.white,
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.green,
+          )..show(context);
 
-        /**Set loading state of button to false &&
+          /**Set loading state of button to false &&
          * Clear the text fields
         */
-        userIdController.clear();
-        idController.clear();
+          userIdController.clear();
+          idController.clear();
 
+          setState(() {
+            _isLoading = false;
+          });
+        } else {
+          /**Set loading state of button to false &&
+         * Clear the text fields
+        */
+          userIdController.clear();
+
+          setState(() {
+            _isLoading = false;
+          });
+
+          /*Error message */
+          Flushbar(
+            message: 'Incorrect login details. Please try again',
+            icon: Icon(
+              Icons.info_outline,
+              size: 28,
+              color: Colors.white,
+            ),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.redAccent,
+          )..show(context);
+        }
+      } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
-      } else {
-        /**Set loading state of button to false &&
-         * Clear the text fields
-        */
-        userIdController.clear();
-        idController.clear();
-
-        setState(() {
-          _isLoading = false;
-        });
-
         /*Error message */
         Flushbar(
-          message: 'Incorrect details!',
+          message:
+              'Request took long to respond. Check your internet connection and try again',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 12),
+          backgroundColor: Colors.red,
+        )..show(context);
+      } on SocketException {
+        setState(() {
+          _isLoading = false;
+        });
+        /*Error message */
+        Flushbar(
+          message:
+              'Network is unreachable. Check your internet connection and try again',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 12),
+          backgroundColor: Colors.red,
         )..show(context);
       }
     }

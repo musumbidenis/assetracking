@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/sessions/stop.dart';
@@ -112,37 +114,10 @@ class _StartButtonState extends State<StartButton> {
 
 /*Handles session initialization */
   Future startSession() async {
-    var connectionStatus =
-        (await Connectivity().checkConnectivity()).toString();
-
-    if (connectionStatus == "ConnectivityResult.none") {
-      setState(() {
-        _isLoading = false;
-      });
-      showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return PlatformAlertDialog(
-                title: Center(child: Text('')),
-                content: SingleChildScrollView(
-                  child: Text(
-                      "No Internet Connection available 😟 Please check your internet connection and try again.",
-                      style: TextStyle(fontSize: 16.0)),
-                ),
-                actions: <Widget>[
-                  PlatformDialogAction(
-                      child: Text('CANCEL'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                ]);
-          });
-    } else {
-      /*Sets button's loading state*/
-      setState(() {
-        _isLoading = true;
-      });
-    }
+    /*Sets button's loading state*/
+    setState(() {
+      _isLoading = true;
+    });
 
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id = localStorage.getString('userKey');
@@ -152,79 +127,113 @@ class _StartButtonState extends State<StartButton> {
       'id': id,
       'barcode': barcode,
     };
+    try {
+      /*Sends data to database */
+      var response = await CallAPi().postData(data, 'start');
+      var body = json.decode(response.body);
+      print(body);
 
-    /*Sends data to database */
-    var response = await CallAPi().postData(data, 'start');
-    var body = json.decode(response.body);
-    print(body);
+      if (body == 'asset does not exist') {
+        setState(() {
+          _isLoading = false;
+        });
 
-    if (body == 'asset does not exist') {
+        Navigator.of(context).pop();
+
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.remove('barcodeKey');
+
+        /* Error message */
+        Flushbar(
+          message:
+              'Asset does not exist. Please choose a valid asset in record!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 8),
+          backgroundColor: Colors.redAccent,
+        )..show(context);
+      } else if (body == 'asset not signed off') {
+        setState(() {
+          _isLoading = false;
+        });
+
+        Navigator.of(context).pop();
+
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.remove('barcodeKey');
+
+        /* Error message */
+        Flushbar(
+          message: 'Asset has not been signed out. Please contact lab admin!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 8),
+          backgroundColor: Colors.redAccent,
+        )..show(context);
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Stop(),
+          ),
+        );
+
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.remove('barcodeKey');
+
+        /* Success message */
+        Flushbar(
+          message: 'Session started successfully!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.greenAccent,
+        )..show(context);
+      }
+    } on TimeoutException {
       setState(() {
         _isLoading = false;
       });
-
-      Navigator.of(context).pop();
-
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('barcodeKey');
-
-      /* Error message */
+      /*Error message */
       Flushbar(
-        message: 'Asset does not exist. Please choose a valid asset in record!',
+        message:
+            'Request took long to respond. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,
           color: Colors.white,
         ),
-        duration: Duration(seconds: 8),
-        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 12),
+        backgroundColor: Colors.red,
       )..show(context);
-    } else if (body == 'asset not signed off') {
+    } on SocketException {
       setState(() {
         _isLoading = false;
       });
-
-      Navigator.of(context).pop();
-
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('barcodeKey');
-
-      /* Error message */
+      /*Error message */
       Flushbar(
-        message: 'Asset has not been signed out. Please contact lab admin!',
+        message:
+            'Network is unreachable. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,
           color: Colors.white,
         ),
-        duration: Duration(seconds: 8),
-        backgroundColor: Colors.redAccent,
-      )..show(context);
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Stop(),
-        ),
-      );
-
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('barcodeKey');
-
-      /* Success message */
-      Flushbar(
-        message: 'Session started successfully!',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.greenAccent,
+        duration: Duration(seconds: 12),
+        backgroundColor: Colors.red,
       )..show(context);
     }
   }

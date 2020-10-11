@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/sessions/start.dart';
 import 'package:connectivity/connectivity.dart';
@@ -112,37 +114,10 @@ class _StopButtonState extends State<StopButton> {
 
 /*Handles termination of a session */
   Future stopSession() async {
-    var connectionStatus =
-        (await Connectivity().checkConnectivity()).toString();
-
-    if (connectionStatus == "ConnectivityResult.none") {
-      setState(() {
-        _isLoading = false;
-      });
-      showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return PlatformAlertDialog(
-                title: Center(child: Text('')),
-                content: SingleChildScrollView(
-                  child: Text(
-                      "No Internet Connection available 😟 Please check your internet connection and try again.",
-                      style: TextStyle(fontSize: 16.0)),
-                ),
-                actions: <Widget>[
-                  PlatformDialogAction(
-                      child: Text('CANCEL'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                ]);
-          });
-    } else {
-      /*Sets button's loading state*/
-      setState(() {
-        _isLoading = true;
-      });
-    }
+    /*Sets button's loading state*/
+    setState(() {
+      _isLoading = true;
+    });
 
     /*Gets data from local storage */
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -154,58 +129,92 @@ class _StopButtonState extends State<StopButton> {
       'barcode': barcode,
     };
 
-    /*Sends data to database */
-    var response = await CallAPi().postData(data, 'stop');
-    var body = json.decode(response.body);
+    try {
+      /*Sends data to database */
+      var response = await CallAPi().postData(data, 'stop');
+      var body = json.decode(response.body);
 
-    if (body == 'youre not signed in for this asset') {
+      if (body == 'youre not signed in for this asset') {
+        setState(() {
+          _isLoading = false;
+        });
+
+        Navigator.of(context).pop();
+
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.remove('barcodeKey');
+
+        /* Error message */
+        Flushbar(
+          message:
+              'Youve not signed in for this asset. Please scan the correct asset!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 8),
+          backgroundColor: Colors.redAccent,
+        )..show(context);
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Start(),
+          ),
+        );
+
+        /*Remove asset from localstorage */
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.remove('barcodeKey');
+
+        /*Success message */
+        Flushbar(
+          message: 'Session terminated successfully!',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.greenAccent,
+        )..show(context);
+      }
+    } on TimeoutException {
       setState(() {
         _isLoading = false;
       });
-
-      Navigator.of(context).pop();
-
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('barcodeKey');
-
-      /* Error message */
+      /*Error message */
       Flushbar(
         message:
-            'Youve not signed in for this asset. Please scan the correct asset!',
+            'Request took long to respond. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,
           color: Colors.white,
         ),
-        duration: Duration(seconds: 8),
-        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 12),
+        backgroundColor: Colors.red,
       )..show(context);
-    } else {
+    } on SocketException {
       setState(() {
         _isLoading = false;
       });
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Start(),
-        ),
-      );
-
-      /*Remove asset from localstorage */
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('barcodeKey');
-
-      /*Success message */
+      /*Error message */
       Flushbar(
-        message: 'Session terminated successfully!',
+        message:
+            'Network is unreachable. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,
           color: Colors.white,
         ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.greenAccent,
+        duration: Duration(seconds: 12),
+        backgroundColor: Colors.red,
       )..show(context);
     }
   }

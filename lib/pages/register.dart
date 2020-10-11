@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:assetracking/API/api.dart';
 import 'package:assetracking/pages/login.dart';
 import 'package:connectivity/connectivity.dart';
@@ -282,9 +284,6 @@ class _RegisterState extends State<Register> {
     if (form.validate()) {
       form.save();
 
-      var connectionStatus =
-          (await Connectivity().checkConnectivity()).toString();
-
       /*User data to be submitted */
       var data = {
         'id': userId.text,
@@ -295,90 +294,101 @@ class _RegisterState extends State<Register> {
         'idNumber': idNumber.text,
       };
 
-      if (connectionStatus == "ConnectivityResult.none") {
-        setState(() {
-          _isLoading = false;
-        });
-        showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return PlatformAlertDialog(
-                  title: Center(child: Text('')),
-                  content: SingleChildScrollView(
-                    child: Text(
-                        "No Internet Connection available 😟 Please check your internet connection and try again.",
-                        style: TextStyle(fontSize: 16.0)),
-                  ),
-                  actions: <Widget>[
-                    PlatformDialogAction(
-                        child: Text('CANCEL'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        })
-                  ]);
-            });
-      } else {
-        /*Sets button's loading state*/
-        setState(() {
-          _isLoading = true;
-        });
-      }
+      /*Sets button's loading state*/
+      setState(() {
+        _isLoading = true;
+      });
 
-      /*Handles posting user data */
-      var response = await CallAPi().postData(data, 'register');
-      var body = json.decode(response.body);
-      if (body == 'success') {
-        Navigator.pop(context);
+      try {
+        /*Handles posting user data */
+        var response = await CallAPi().postData(data, 'register');
+        var body = json.decode(response.body);
+        if (body == 'success') {
+          Navigator.pop(context);
 
-        /*Success message */
-        Flushbar(
-          message: 'Registration was successfull!',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 3),
-          backgroundColor: Colors.green,
-        )..show(context);
+          /*Success message */
+          Flushbar(
+            message: 'Registration was successfull!',
+            icon: Icon(
+              Icons.info_outline,
+              size: 28,
+              color: Colors.white,
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.green,
+          )..show(context);
 
-        /**Set loading state of button to false &&
+          /**Set loading state of button to false &&
          * Clear the text fields
         */
-        userId.clear();
-        firstName.clear();
-        surname.clear();
-        idNumber.clear();
-        phone.clear();
-        email.clear();
+          userId.clear();
+          firstName.clear();
+          surname.clear();
+          idNumber.clear();
+          phone.clear();
+          email.clear();
 
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        /**Set loading state of button to false &&
+          setState(() {
+            _isLoading = false;
+          });
+        } else {
+          /**Set loading state of button to false &&
          * Clear the text fields
         */
-        userId.clear();
-        firstName.clear();
-        surname.clear();
-        idNumber.clear();
-        phone.clear();
-        email.clear();
+          userId.clear();
+          firstName.clear();
+          surname.clear();
+          idNumber.clear();
+          phone.clear();
+          email.clear();
 
+          setState(() {
+            _isLoading = false;
+          });
+
+          /*Error message */
+          Flushbar(
+            message:
+                'Admission No or Employee Id entered is already registered!',
+            icon: Icon(
+              Icons.info_outline,
+              size: 28,
+              color: Colors.white,
+            ),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.red,
+          )..show(context);
+        }
+      } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
-
         /*Error message */
         Flushbar(
-          message: 'Admission No or Employee Id entered is already registered!',
+          message:
+              'Request took long to respond. Check your internet connection and try again',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 12),
+          backgroundColor: Colors.red,
+        )..show(context);
+      } on SocketException {
+        setState(() {
+          _isLoading = false;
+        });
+        /*Error message */
+        Flushbar(
+          message:
+              'Network is unreachable. Check your internet connection and try again',
+          icon: Icon(
+            Icons.info_outline,
+            size: 28,
+            color: Colors.white,
+          ),
+          duration: Duration(seconds: 12),
           backgroundColor: Colors.red,
         )..show(context);
       }
