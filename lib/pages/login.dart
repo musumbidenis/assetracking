@@ -47,16 +47,16 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
                       'Oops,',
-                      style: TextStyle(fontSize: 20.0),
+                      style: TextStyle(fontSize: 19.0),
                     ),
                   ),
                   Text(
                     "No internet connection",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                   ),
                   Text(
                     "Check your connection and try again",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                   )
                 ],
               ),
@@ -148,7 +148,7 @@ class _LoginState extends State<Login> {
                             child: GestureDetector(
                               child: Center(
                                 child: Text(
-                                  _isLoading ? 'LOGING..' : 'LOGIN',
+                                  _isLoading ? 'LOGING...' : 'LOGIN',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -246,7 +246,7 @@ class _LoginState extends State<Login> {
           /**Set loading state of button to false &&
          * Clear the text fields
         */
-          userIdController.clear();
+          idController.clear();
 
           setState(() {
             _isLoading = false;
@@ -261,7 +261,7 @@ class _LoginState extends State<Login> {
               color: Colors.white,
             ),
             duration: Duration(seconds: 5),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: Colors.red,
           )..show(context);
         }
       } on TimeoutException {
@@ -271,7 +271,7 @@ class _LoginState extends State<Login> {
         /*Error message */
         Flushbar(
           message:
-              'Request took long to respond. Check your internet connection and try again',
+              'Request took too long to respond. Check your internet connection and try again',
           icon: Icon(
             Icons.info_outline,
             size: 28,

@@ -72,7 +72,7 @@ class _StartState extends State<Start> {
                     ),
                     Text(
                       "Check your connection and try again",
-                      style: TextStyle(fontSize: 16.0),
+                      style: TextStyle(fontSize: 17.0),
                     )
                   ],
                 ),
@@ -200,8 +200,7 @@ class _StartState extends State<Start> {
       }
     } on FormatException {
       Flushbar(
-        message:
-            'User returned using the "back"-button before scanning anything',
+        message: 'You returned back before scanning anything',
         icon: Icon(
           Icons.info_outline,
           size: 28,

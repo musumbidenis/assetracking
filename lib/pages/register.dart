@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:assetracking/API/api.dart';
-import 'package:assetracking/pages/login.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -57,7 +55,7 @@ class _RegisterState extends State<Register> {
                   ),
                   Text(
                     "Check your connection and try again",
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 17.0),
                   )
                 ],
               ),
@@ -308,7 +306,7 @@ class _RegisterState extends State<Register> {
 
           /*Success message */
           Flushbar(
-            message: 'Registration was successfull!',
+            message: 'Registration was successfull',
             icon: Icon(
               Icons.info_outline,
               size: 28,
@@ -349,7 +347,7 @@ class _RegisterState extends State<Register> {
           /*Error message */
           Flushbar(
             message:
-                'Admission No or Employee Id entered is already registered!',
+                'Admission No or Employee Id entered is already registered',
             icon: Icon(
               Icons.info_outline,
               size: 28,
@@ -366,7 +364,7 @@ class _RegisterState extends State<Register> {
         /*Error message */
         Flushbar(
           message:
-              'Request took long to respond. Check your internet connection and try again',
+              'Request took too long to respond. Check your internet connection and try again',
           icon: Icon(
             Icons.info_outline,
             size: 28,

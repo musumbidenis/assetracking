@@ -8,7 +8,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartButton extends StatefulWidget {
@@ -62,7 +61,7 @@ class _StartButtonState extends State<StartButton> {
                   ),
                   Text(
                     "Check your connection and try again",
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 17.0),
                   )
                 ],
               ),
@@ -146,14 +145,14 @@ class _StartButtonState extends State<StartButton> {
         /* Error message */
         Flushbar(
           message:
-              'Asset does not exist. Please choose a valid asset in record!',
+              'Asset scanned does not exist. Please scan a valid asset in record',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
           duration: Duration(seconds: 8),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.red,
         )..show(context);
       } else if (body == 'asset not signed off') {
         setState(() {
@@ -167,14 +166,15 @@ class _StartButtonState extends State<StartButton> {
 
         /* Error message */
         Flushbar(
-          message: 'Asset has not been signed out. Please contact lab admin!',
+          message:
+              'Asset has not been signed out. Contact lab admin for assistance',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
           duration: Duration(seconds: 8),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.red,
         )..show(context);
       } else {
         setState(() {
@@ -193,14 +193,14 @@ class _StartButtonState extends State<StartButton> {
 
         /* Success message */
         Flushbar(
-          message: 'Session started successfully!',
+          message: 'Session started successfully',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
           duration: Duration(seconds: 3),
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green,
         )..show(context);
       }
     } on TimeoutException {
@@ -210,7 +210,7 @@ class _StartButtonState extends State<StartButton> {
       /*Error message */
       Flushbar(
         message:
-            'Request took long to respond. Check your internet connection and try again',
+            'Request took too long to respond. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,

@@ -9,7 +9,7 @@ class CallAPi {
     var fullUrl = _url + apiUrl;
     return await http
         .post(fullUrl, body: jsonEncode(data), headers: _setHeaders())
-        .timeout(const Duration(seconds: 30));
+        .timeout(const Duration(seconds: 60));
   }
 
   /*Fetches data from database */

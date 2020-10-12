@@ -7,7 +7,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StopButton extends StatefulWidget {
@@ -62,7 +61,7 @@ class _StopButtonState extends State<StopButton> {
                   ),
                   Text(
                     "Check your connection and try again",
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 17.0),
                   )
                 ],
               ),
@@ -147,14 +146,14 @@ class _StopButtonState extends State<StopButton> {
         /* Error message */
         Flushbar(
           message:
-              'Youve not signed in for this asset. Please scan the correct asset!',
+              'You\'ve not signed in for this asset. Please scan the correct asset',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
           duration: Duration(seconds: 8),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.red,
         )..show(context);
       } else {
         setState(() {
@@ -174,14 +173,14 @@ class _StopButtonState extends State<StopButton> {
 
         /*Success message */
         Flushbar(
-          message: 'Session terminated successfully!',
+          message: 'Session terminated successfully',
           icon: Icon(
             Icons.info_outline,
             size: 28,
             color: Colors.white,
           ),
           duration: Duration(seconds: 3),
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green,
         )..show(context);
       }
     } on TimeoutException {
@@ -191,7 +190,7 @@ class _StopButtonState extends State<StopButton> {
       /*Error message */
       Flushbar(
         message:
-            'Request took long to respond. Check your internet connection and try again',
+            'Request took too long to respond. Check your internet connection and try again',
         icon: Icon(
           Icons.info_outline,
           size: 28,
