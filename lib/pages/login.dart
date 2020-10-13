@@ -138,26 +138,34 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: 50.0),
                       Container(
-                        height: 50.0,
+                        height: 55.0,
                         child: GestureDetector(
                           child: Material(
                             borderRadius: BorderRadius.circular(5.0),
-                            shadowColor: Colors.blue,
                             color: Color(0xff01A0C7),
                             elevation: 5.0,
                             child: GestureDetector(
                               child: Center(
-                                child: Text(
-                                  _isLoading ? 'LOGING...' : 'LOGIN',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Source Sans Pro'),
-                                ),
+                                child: _isLoading
+                                    ? CircularProgressIndicator(
+                                        backgroundColor: Colors.white,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.black12),
+                                      )
+                                    : Text(
+                                        'LOGIN',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Source Sans Pro',
+                                            letterSpacing: 2.0),
+                                      ),
                               ),
                             ),
                           ),
-                          onTap: _handleLogin,
+                          onTap: _isLoading ? null : _handleLogin,
                         ),
                       ),
                     ],
