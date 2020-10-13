@@ -94,11 +94,36 @@ class _StartButtonState extends State<StartButton> {
                       child: FloatingActionButton.extended(
                         backgroundColor: Color(0xff01A0C7),
                         elevation: 0.0,
-                        label: Text(
-                          _isLoading ? 'Starting...' : 'Start',
-                          style: style.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: startSession,
+                        label: _isLoading
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 25.0,
+                                    width: 25.0,
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.black12),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Starting',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontFamily: 'Source Sans Pro',
+                                        letterSpacing: 2.0),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                'Start',
+                                style:
+                                    style.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                        onPressed: _isLoading ? null : startSession,
                       ),
                     ),
                   ),

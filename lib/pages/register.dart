@@ -232,19 +232,45 @@ class _RegisterState extends State<Register> {
                               color: Color(0xff01A0C7),
                               elevation: 5.0,
                               child: GestureDetector(
-                                child: Center(
-                                  child: Text(
-                                    _isLoading ? 'REGISTERING...' : 'REGISTER',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Source Sans Pro',
-                                        letterSpacing: 2.0),
-                                  ),
-                                ),
+                                child: _isLoading
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 25.0,
+                                            width: 25.0,
+                                            child: CircularProgressIndicator(
+                                              backgroundColor: Colors.white,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.black12),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          Text(
+                                            'Registering',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20.0,
+                                                fontFamily: 'Source Sans Pro',
+                                                letterSpacing: 2.0),
+                                          ),
+                                        ],
+                                      )
+                                    : Center(
+                                        child: Text(
+                                          'Register',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontFamily: 'Source Sans Pro',
+                                              letterSpacing: 2.0),
+                                        ),
+                                      ),
                               ),
                             ),
-                            onTap: _handleRegister,
+                            onTap: _isLoading ? null : _handleRegister,
                           ),
                         ),
                       ],

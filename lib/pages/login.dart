@@ -147,18 +147,36 @@ class _LoginState extends State<Login> {
                             child: GestureDetector(
                               child: Center(
                                 child: _isLoading
-                                    ? CircularProgressIndicator(
-                                        backgroundColor: Colors.white,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.black12),
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 25.0,
+                                            width: 25.0,
+                                            child: CircularProgressIndicator(
+                                              backgroundColor: Colors.white,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.black12),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          Text(
+                                            'Logging In',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20.0,
+                                                fontFamily: 'Source Sans Pro',
+                                                letterSpacing: 2.0),
+                                          ),
+                                        ],
                                       )
                                     : Text(
-                                        'LOGIN',
+                                        'Log In',
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0,
                                             fontFamily: 'Source Sans Pro',
                                             letterSpacing: 2.0),
                                       ),
