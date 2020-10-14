@@ -131,8 +131,8 @@ class _LoginState extends State<Login> {
                         validator: (String value) {
                           if (value.isEmpty) {
                             return "ID Number field cannot be blank";
-                          } else if (value.length < 8 || value.length > 8) {
-                            return "ID Number cannot be less than or greater than eight";
+                          } else if (value.length < 8) {
+                            return "ID Number must be atleast eight characters";
                           }
                         },
                       ),
@@ -147,30 +147,11 @@ class _LoginState extends State<Login> {
                             child: GestureDetector(
                               child: Center(
                                 child: _isLoading
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 25.0,
-                                            width: 25.0,
-                                            child: CircularProgressIndicator(
-                                              backgroundColor: Colors.white,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Colors.black12),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.0),
-                                          Text(
-                                            'Logging In',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0,
-                                                fontFamily: 'Source Sans Pro',
-                                                letterSpacing: 2.0),
-                                          ),
-                                        ],
+                                    ? CircularProgressIndicator(
+                                        backgroundColor: Colors.white,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.black12),
                                       )
                                     : Text(
                                         'Log In',
@@ -310,6 +291,7 @@ class _LoginState extends State<Login> {
         setState(() {
           _isLoading = false;
         });
+
         /*Error message */
         Flushbar(
           message:
