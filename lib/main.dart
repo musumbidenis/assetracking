@@ -1,6 +1,5 @@
-import 'package:assetracking/pages/login.dart';
-import 'package:assetracking/sessions/start.dart';
 import 'package:flutter/material.dart';
+import 'package:assetracking/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());

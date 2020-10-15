@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:assetracking/API/api.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:assetracking/widgets/widgets.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
 class Register extends StatefulWidget {

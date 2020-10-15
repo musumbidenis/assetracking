@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:assetracking/API/api.dart';
-import 'package:assetracking/pages/register.dart';
-import 'package:assetracking/sessions/start.dart';
+import 'package:flutter/material.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:assetracking/widgets/widgets.dart';
+import 'package:assetracking/screens/screens.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
   @override

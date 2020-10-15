@@ -1,25 +1,25 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:assetracking/API/api.dart';
-import 'package:assetracking/sessions/stop.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:assetracking/widgets/widgets.dart';
+import 'package:assetracking/screens/screens.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StartButton extends StatefulWidget {
+class StopButton extends StatefulWidget {
   @override
-  _StartButtonState createState() => _StartButtonState();
+  _StopButtonState createState() => _StopButtonState();
 }
 
-class _StartButtonState extends State<StartButton> {
+class _StopButtonState extends State<StopButton> {
   bool _isLoading = false;
 
   String id;
   String barcode;
+  String lab;
 
   TextStyle style = TextStyle(fontFamily: "Montserrat", fontSize: 20.0);
 
@@ -30,7 +30,7 @@ class _StartButtonState extends State<StartButton> {
       appBar: AppBar(
         backgroundColor: Color(0xff01A0C7),
         title: Text(
-          "Start Button",
+          "Stop Button",
           style: style.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -79,7 +79,7 @@ class _StartButtonState extends State<StartButton> {
                   Padding(
                     padding: const EdgeInsets.only(left: 35),
                     child: Center(
-                      child: Text("Click start button to begin session",
+                      child: Text("Click stop button to terminate session",
                           style: style.copyWith(
                             color: Color(0xff01A0C7),
                             fontSize: 30,
@@ -105,11 +105,11 @@ class _StartButtonState extends State<StartButton> {
                                 ),
                               )
                             : Text(
-                                'Start',
+                                'Stop',
                                 style:
                                     style.copyWith(fontWeight: FontWeight.bold),
                               ),
-                        onPressed: _isLoading ? null : startSession,
+                        onPressed: _isLoading ? null : stopSession,
                       ),
                     ),
                   ),
@@ -122,13 +122,14 @@ class _StartButtonState extends State<StartButton> {
     );
   }
 
-/*Handles session initialization */
-  Future startSession() async {
+/*Handles termination of a session */
+  Future stopSession() async {
     /*Sets button's loading state*/
     setState(() {
       _isLoading = true;
     });
 
+    /*Gets data from local storage */
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id = localStorage.getString('userKey');
     barcode = localStorage.getString('barcodeKey');
@@ -137,13 +138,13 @@ class _StartButtonState extends State<StartButton> {
       'id': id,
       'barcode': barcode,
     };
+
     try {
       /*Sends data to database */
-      var response = await CallAPi().postData(data, 'start');
+      var response = await CallAPi().postData(data, 'stop');
       var body = json.decode(response.body);
-      print(body);
 
-      if (body == 'asset does not exist') {
+      if (body == 'youre not signed in for this asset') {
         setState(() {
           _isLoading = false;
         });
@@ -156,29 +157,7 @@ class _StartButtonState extends State<StartButton> {
         /* Error message */
         Flushbar(
           message:
-              'Asset scanned does not exist. Please scan a valid asset in record',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 8),
-          backgroundColor: Colors.red,
-        )..show(context);
-      } else if (body == 'asset not signed off') {
-        setState(() {
-          _isLoading = false;
-        });
-
-        Navigator.of(context).pop();
-
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-        localStorage.remove('barcodeKey');
-
-        /* Error message */
-        Flushbar(
-          message:
-              'Asset has not been signed out. Contact lab admin for assistance',
+              'You\'ve not signed in for this asset. Please scan the correct asset',
           icon: Icon(
             Icons.info_outline,
             size: 28,
@@ -195,16 +174,17 @@ class _StartButtonState extends State<StartButton> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Stop(),
+            builder: (context) => Start(),
           ),
         );
 
+        /*Remove asset from localstorage */
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        /* Success message */
+        /*Success message */
         Flushbar(
-          message: 'Session started successfully',
+          message: 'Session terminated successfully',
           icon: Icon(
             Icons.info_outline,
             size: 28,

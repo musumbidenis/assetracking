@@ -1,12 +1,12 @@
-import 'package:assetracking/sessions/startButton.dart';
-import 'package:assetracking/sessions/stop.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:assetracking/screens/screens.dart';
+import 'package:assetracking/widgets/widgets.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 class Start extends StatefulWidget {
   @override
