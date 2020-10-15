@@ -236,10 +236,7 @@ class _LoginState extends State<Login> {
             MaterialPageRoute(builder: (context) => Start()),
           );
 
-          Alert(
-            message: 'Login was successfull',
-            backgroundColor: Colors.green,
-          );
+          alert('Login was successfull', Colors.green, context);
         } else {
           setState(() {
             _isLoading = false;
@@ -247,31 +244,27 @@ class _LoginState extends State<Login> {
 
           idController.clear();
 
-          Alert(
-            message: 'Incorrect login details. Please try again',
-            backgroundColor: Colors.red,
-          );
+          alert(
+              'Incorrect login details. Please try again', Colors.red, context);
         }
       } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
 
-        Alert(
-          message:
-              'Request took too long to respond. Check your internet connection and try again',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'Request took too long to respond. Check your internet connection and try again',
+            Colors.red,
+            context);
       } on SocketException {
         setState(() {
           _isLoading = false;
         });
 
-        Alert(
-          message:
-              'Network is unreachable. Check your internet connection and try again',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'Network is unreachable. Check your internet connection and try again',
+            Colors.red,
+            context);
       }
     }
   }

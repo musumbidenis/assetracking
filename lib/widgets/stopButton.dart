@@ -151,11 +151,10 @@ class _StopButtonState extends State<StopButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        Alert(
-          message:
-              'You\'ve not signed in for this asset. Please scan the correct asset',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'You\'ve not signed in for this asset. Please scan the correct asset',
+            Colors.red,
+            context);
       } else {
         setState(() {
           _isLoading = false;
@@ -171,31 +170,26 @@ class _StopButtonState extends State<StopButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        Alert(
-          message: 'Session terminated successfully',
-          backgroundColor: Colors.green,
-        );
+        alert('Session terminated successfully', Colors.green, context);
       }
     } on TimeoutException {
       setState(() {
         _isLoading = false;
       });
 
-      Alert(
-        message:
-            'Request took too long to respond. Check your internet connection and try again',
-        backgroundColor: Colors.red,
-      );
+      alert(
+          'Request took too long to respond. Check your internet connection and try again',
+          Colors.red,
+          context);
     } on SocketException {
       setState(() {
         _isLoading = false;
       });
 
-      Alert(
-        message:
-            'Network is unreachable. Check your internet connection and try again',
-        backgroundColor: Colors.red,
-      );
+      alert(
+          'Network is unreachable. Check your internet connection and try again',
+          Colors.red,
+          context);
     }
   }
 }

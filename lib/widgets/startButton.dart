@@ -150,11 +150,10 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        Alert(
-          message:
-              'Asset scanned does not exist. Please scan a valid asset in record',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'Asset scanned does not exist. Please scan a valid asset in record',
+            Colors.red,
+            context);
       } else if (body == 'asset not signed off') {
         setState(() {
           _isLoading = false;
@@ -165,11 +164,8 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        Alert(
-          message:
-              'Asset has not been signed out. Contact lab admin for assistance',
-          backgroundColor: Colors.red,
-        );
+        alert('Asset has not been signed out. Contact lab admin for assistance',
+            Colors.red, context);
       } else {
         setState(() {
           _isLoading = false;
@@ -185,31 +181,26 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        Alert(
-          message: 'Session started successfully',
-          backgroundColor: Colors.green,
-        );
+        alert('Session started successfully', Colors.green, context);
       }
     } on TimeoutException {
       setState(() {
         _isLoading = false;
       });
 
-      Alert(
-        message:
-            'Request took too long to respond. Check your internet connection and try again',
-        backgroundColor: Colors.red,
-      );
+      alert(
+          'Request took too long to respond. Check your internet connection and try again',
+          Colors.red,
+          context);
     } on SocketException {
       setState(() {
         _isLoading = false;
       });
 
-      Alert(
-        message:
-            'Network is unreachable. Check your internet connection and try again',
-        backgroundColor: Colors.red,
-      );
+      alert(
+          'Network is unreachable. Check your internet connection and try again',
+          Colors.red,
+          context);
     }
   }
 }

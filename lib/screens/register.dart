@@ -323,10 +323,7 @@ class _RegisterState extends State<Register> {
 
           Navigator.pop(context);
 
-          Alert(
-            message: 'Registeration was successfull',
-            backgroundColor: Colors.green,
-          );
+          alert('Registeration was successfull', Colors.green, context);
         } else {
           setState(() {
             _isLoading = false;
@@ -334,32 +331,27 @@ class _RegisterState extends State<Register> {
 
           userId.clear();
 
-          Alert(
-            message:
-                'Admission No or Employee Id entered is already registered',
-            backgroundColor: Colors.red,
-          );
+          alert('Admission No or Employee Id entered is already registered',
+              Colors.red, context);
         }
       } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
 
-        Alert(
-          message:
-              'Request took too long to respond. Check your internet connection and try again',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'Request took too long to respond. Check your internet connection and try again',
+            Colors.red,
+            context);
       } on SocketException {
         setState(() {
           _isLoading = false;
         });
 
-        Alert(
-          message:
-              'Network is unreachable. Check your internet connection and try again',
-          backgroundColor: Colors.red,
-        );
+        alert(
+            'Network is unreachable. Check your internet connection and try again',
+            Colors.red,
+            context);
       }
     }
   }
