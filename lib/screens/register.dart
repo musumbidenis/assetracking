@@ -293,7 +293,6 @@ class _RegisterState extends State<Register> {
     if (form.validate()) {
       form.save();
 
-      /*User data to be submitted */
       var data = {
         'id': userId.text,
         'fname': firstName.text,
@@ -303,33 +302,18 @@ class _RegisterState extends State<Register> {
         'idNumber': idNumber.text,
       };
 
-      /*Sets button's loading state*/
       setState(() {
         _isLoading = true;
       });
 
       try {
-        /*Handles posting user data */
         var response = await CallAPi().postData(data, 'register');
         var body = json.decode(response.body);
         if (body == 'success') {
-          Navigator.pop(context);
+          setState(() {
+            _isLoading = false;
+          });
 
-          /*Success message */
-          Flushbar(
-            message: 'Registration was successfull',
-            icon: Icon(
-              Icons.info_outline,
-              size: 28,
-              color: Colors.white,
-            ),
-            duration: Duration(seconds: 3),
-            backgroundColor: Colors.green,
-          )..show(context);
-
-          /**Set loading state of button to false &&
-         * Clear the text fields
-        */
           userId.clear();
           firstName.clear();
           surname.clear();
@@ -337,64 +321,45 @@ class _RegisterState extends State<Register> {
           phone.clear();
           email.clear();
 
+          Navigator.pop(context);
+
+          Alert(
+            message: 'Registeration was successfull',
+            backgroundColor: Colors.green,
+          );
+        } else {
           setState(() {
             _isLoading = false;
           });
-        } else {
-          /**Set loading state of button to false &&
-         * Clear the text fields
-        */
+
           userId.clear();
 
-          setState(() {
-            _isLoading = false;
-          });
-
-          /*Error message */
-          Flushbar(
+          Alert(
             message:
                 'Admission No or Employee Id entered is already registered',
-            icon: Icon(
-              Icons.info_outline,
-              size: 28,
-              color: Colors.white,
-            ),
-            duration: Duration(seconds: 5),
             backgroundColor: Colors.red,
-          )..show(context);
+          );
         }
       } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
-        /*Error message */
-        Flushbar(
+
+        Alert(
           message:
               'Request took too long to respond. Check your internet connection and try again',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 12),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       } on SocketException {
         setState(() {
           _isLoading = false;
         });
-        /*Error message */
-        Flushbar(
+
+        Alert(
           message:
               'Network is unreachable. Check your internet connection and try again',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 12),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       }
     }
   }

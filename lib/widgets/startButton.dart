@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:assetracking/widgets/alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:assetracking/widgets/widgets.dart';
 import 'package:assetracking/screens/screens.dart';
@@ -123,7 +123,6 @@ class _StartButtonState extends State<StartButton> {
 
 /*Handles session initialization */
   Future startSession() async {
-    /*Sets button's loading state*/
     setState(() {
       _isLoading = true;
     });
@@ -137,7 +136,6 @@ class _StartButtonState extends State<StartButton> {
       'barcode': barcode,
     };
     try {
-      /*Sends data to database */
       var response = await CallAPi().postData(data, 'start');
       var body = json.decode(response.body);
       print(body);
@@ -152,18 +150,11 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        /* Error message */
-        Flushbar(
+        Alert(
           message:
               'Asset scanned does not exist. Please scan a valid asset in record',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 8),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       } else if (body == 'asset not signed off') {
         setState(() {
           _isLoading = false;
@@ -174,18 +165,11 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        /* Error message */
-        Flushbar(
+        Alert(
           message:
               'Asset has not been signed out. Contact lab admin for assistance',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 8),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       } else {
         setState(() {
           _isLoading = false;
@@ -201,50 +185,31 @@ class _StartButtonState extends State<StartButton> {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('barcodeKey');
 
-        /* Success message */
-        Flushbar(
+        Alert(
           message: 'Session started successfully',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 3),
           backgroundColor: Colors.green,
-        )..show(context);
+        );
       }
     } on TimeoutException {
       setState(() {
         _isLoading = false;
       });
-      /*Error message */
-      Flushbar(
+
+      Alert(
         message:
             'Request took too long to respond. Check your internet connection and try again',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 12),
         backgroundColor: Colors.red,
-      )..show(context);
+      );
     } on SocketException {
       setState(() {
         _isLoading = false;
       });
-      /*Error message */
-      Flushbar(
+
+      Alert(
         message:
             'Network is unreachable. Check your internet connection and try again',
-        icon: Icon(
-          Icons.info_outline,
-          size: 28,
-          color: Colors.white,
-        ),
-        duration: Duration(seconds: 12),
         backgroundColor: Colors.red,
-      )..show(context);
+      );
     }
   }
 }

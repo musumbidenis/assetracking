@@ -207,23 +207,26 @@ class _LoginState extends State<Login> {
     if (form.validate()) {
       form.save();
 
-      /*Data to be cross-checked in the db */
       var data = {
         'id': userIdController.text,
         'idNumber': idController.text,
       };
 
-      /*Sets button's loading state*/
       setState(() {
         _isLoading = true;
       });
 
       try {
-        /*verify login credentials provided */
         var response = await CallAPi().postData(data, 'login');
         var body = json.decode(response.body);
         if (body == 'success') {
-          /*Save students admission in the localStorage */
+          setState(() {
+            _isLoading = false;
+          });
+
+          userIdController.clear();
+          idController.clear();
+
           SharedPreferences localStorage =
               await SharedPreferences.getInstance();
           await localStorage.setString('userKey', userIdController.text);
@@ -233,82 +236,42 @@ class _LoginState extends State<Login> {
             MaterialPageRoute(builder: (context) => Start()),
           );
 
-          /*Success message */
-          Flushbar(
+          Alert(
             message: 'Login was successfull',
-            icon: Icon(
-              Icons.info_outline,
-              size: 28,
-              color: Colors.white,
-            ),
-            duration: Duration(seconds: 3),
             backgroundColor: Colors.green,
-          )..show(context);
+          );
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
 
-          /**Set loading state of button to false &&
-         * Clear the text fields
-        */
-          userIdController.clear();
           idController.clear();
 
-          setState(() {
-            _isLoading = false;
-          });
-        } else {
-          /**Set loading state of button to false &&
-         * Clear the text fields
-        */
-          // idController.clear();
-
-          setState(() {
-            _isLoading = false;
-          });
-
-          /*Error message */
-          Flushbar(
+          Alert(
             message: 'Incorrect login details. Please try again',
-            icon: Icon(
-              Icons.info_outline,
-              size: 28,
-              color: Colors.white,
-            ),
-            duration: Duration(seconds: 5),
             backgroundColor: Colors.red,
-          )..show(context);
+          );
         }
       } on TimeoutException {
         setState(() {
           _isLoading = false;
         });
-        /*Error message */
-        Flushbar(
+
+        Alert(
           message:
               'Request took too long to respond. Check your internet connection and try again',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 12),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       } on SocketException {
         setState(() {
           _isLoading = false;
         });
 
-        /*Error message */
-        Flushbar(
+        Alert(
           message:
               'Network is unreachable. Check your internet connection and try again',
-          icon: Icon(
-            Icons.info_outline,
-            size: 28,
-            color: Colors.white,
-          ),
-          duration: Duration(seconds: 12),
           backgroundColor: Colors.red,
-        )..show(context);
+        );
       }
     }
   }
