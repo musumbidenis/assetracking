@@ -95,28 +95,14 @@ class _StopButtonState extends State<StopButton> {
                         backgroundColor: Color(0xff01A0C7),
                         elevation: 0.0,
                         label: _isLoading
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 25.0,
-                                    width: 25.0,
-                                    child: CircularProgressIndicator(
-                                      backgroundColor: Colors.white,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.black12),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10.0),
-                                  Text(
-                                    'Stopping',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontFamily: 'Source Sans Pro',
-                                        letterSpacing: 2.0),
-                                  ),
-                                ],
+                            ? SizedBox(
+                                height: 28.0,
+                                width: 28.0,
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.black12),
+                                ),
                               )
                             : Text(
                                 'Stop',

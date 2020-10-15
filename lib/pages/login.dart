@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
+                    left: 25.0, right: 25.0, top: 50.0, bottom: 8.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -136,9 +136,9 @@ class _LoginState extends State<Login> {
                           }
                         },
                       ),
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 40.0),
                       Container(
-                        height: 55.0,
+                        height: 50.0,
                         child: GestureDetector(
                           child: Material(
                             borderRadius: BorderRadius.circular(5.0),
@@ -147,18 +147,23 @@ class _LoginState extends State<Login> {
                             child: GestureDetector(
                               child: Center(
                                 child: _isLoading
-                                    ? CircularProgressIndicator(
-                                        backgroundColor: Colors.white,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.black12),
+                                    ? SizedBox(
+                                        height: 28.0,
+                                        width: 28.0,
+                                        child: CircularProgressIndicator(
+                                          backgroundColor: Colors.white,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.black12),
+                                        ),
                                       )
                                     : Text(
-                                        'Log In',
+                                        'LOGIN',
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 20.0,
+                                            fontSize: 16.0,
                                             fontFamily: 'Source Sans Pro',
+                                            fontWeight: FontWeight.bold,
                                             letterSpacing: 2.0),
                                       ),
                               ),
@@ -253,7 +258,7 @@ class _LoginState extends State<Login> {
           /**Set loading state of button to false &&
          * Clear the text fields
         */
-          idController.clear();
+          // idController.clear();
 
           setState(() {
             _isLoading = false;

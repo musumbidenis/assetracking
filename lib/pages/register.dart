@@ -81,7 +81,7 @@ class _RegisterState extends State<Register> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 25.0, right: 25.0, top: 50.0, bottom: 15.0),
+                      left: 25.0, right: 25.0, top: 50.0, bottom: 8.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -222,52 +222,37 @@ class _RegisterState extends State<Register> {
                             }
                           },
                         ),
-                        SizedBox(height: 50.0),
+                        SizedBox(height: 40.0),
                         Container(
                           height: 50.0,
                           child: GestureDetector(
                             child: Material(
                               borderRadius: BorderRadius.circular(5.0),
-                              shadowColor: Colors.blue,
                               color: Color(0xff01A0C7),
                               elevation: 5.0,
                               child: GestureDetector(
-                                child: _isLoading
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 25.0,
-                                            width: 25.0,
-                                            child: CircularProgressIndicator(
-                                              backgroundColor: Colors.white,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Colors.black12),
-                                            ),
+                                child: Center(
+                                  child: _isLoading
+                                      ? SizedBox(
+                                          height: 28.0,
+                                          width: 28.0,
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.white,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.black12),
                                           ),
-                                          SizedBox(width: 10.0),
-                                          Text(
-                                            'Registering',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0,
-                                                fontFamily: 'Source Sans Pro',
-                                                letterSpacing: 2.0),
-                                          ),
-                                        ],
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          'Register',
+                                        )
+                                      : Text(
+                                          'REGISTER',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 20.0,
+                                              fontSize: 15.0,
                                               fontFamily: 'Source Sans Pro',
+                                              fontWeight: FontWeight.bold,
                                               letterSpacing: 2.0),
                                         ),
-                                      ),
+                                ),
                               ),
                             ),
                             onTap: _isLoading ? null : _handleRegister,
@@ -360,11 +345,6 @@ class _RegisterState extends State<Register> {
          * Clear the text fields
         */
           userId.clear();
-          firstName.clear();
-          surname.clear();
-          idNumber.clear();
-          phone.clear();
-          email.clear();
 
           setState(() {
             _isLoading = false;
