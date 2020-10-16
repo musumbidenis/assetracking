@@ -138,7 +138,6 @@ class _StartButtonState extends State<StartButton> {
     try {
       var response = await CallAPi().postData(data, 'start');
       var body = json.decode(response.body);
-      print(body);
 
       if (body == 'asset does not exist') {
         setState(() {

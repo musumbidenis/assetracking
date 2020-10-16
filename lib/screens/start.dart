@@ -41,7 +41,7 @@ class _StartState extends State<Start> {
                     Icons.exit_to_app,
                     color: Colors.white,
                   ),
-                  onPressed: alert,
+                  onPressed: exitAlert(context),
                 ),
               ),
             ]),
@@ -82,9 +82,7 @@ class _StartState extends State<Start> {
           },
           child: WillPopScope(
             // ignore: missing_return
-            onWillPop: () {
-              alert();
-            },
+            onWillPop: exitAlert(context),
             child: Center(
               child: SingleChildScrollView(
                 child: Container(
@@ -221,39 +219,5 @@ class _StartState extends State<Start> {
         backgroundColor: Colors.red,
       )..show(context);
     }
-  }
-
-  /* Handles the exit alert dialog */
-  alert() {
-    showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return PlatformAlertDialog(
-              title: Center(child: Text('Exit Application')),
-              content: SingleChildScrollView(
-                child: Text("Are you sure you want to exit application ? ",
-                    style: TextStyle(fontSize: 18.0)),
-              ),
-              actions: <Widget>[
-                PlatformDialogAction(
-                    child: Text('YES'),
-                    onPressed: () async {
-                      /*Store the value to localstorage */
-                      SharedPreferences localStorage =
-                          await SharedPreferences.getInstance();
-                      localStorage.clear();
-
-                      Navigator.of(context).pop();
-
-                      SystemChannels.platform
-                          .invokeMethod('SystemNavigator.pop');
-                    }),
-                PlatformDialogAction(
-                    child: Text('CANCEL'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    })
-              ]);
-        });
   }
 }
