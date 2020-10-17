@@ -23,7 +23,7 @@ exitAlert(context) {
       context: context,
       builder: (BuildContext context) {
         return PlatformAlertDialog(
-            title: Center(child: Text('Exit application ?')),
+            title: Text('Exit Application?'),
             content: SingleChildScrollView(
               child: Text("This action cannot be undone.",
                   style: TextStyle(fontSize: 18.0)),

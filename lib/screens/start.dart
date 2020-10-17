@@ -41,7 +41,9 @@ class _StartState extends State<Start> {
                     Icons.exit_to_app,
                     color: Colors.white,
                   ),
-                  onPressed: exitAlert(context),
+                  onPressed: () {
+                    exitAlert(context);
+                  },
                 ),
               ),
             ]),
@@ -82,7 +84,9 @@ class _StartState extends State<Start> {
           },
           child: WillPopScope(
             // ignore: missing_return
-            onWillPop: exitAlert(context),
+            onWillPop: () {
+              exitAlert(context);
+            },
             child: Center(
               child: SingleChildScrollView(
                 child: Container(
