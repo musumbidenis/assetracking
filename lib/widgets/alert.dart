@@ -1,8 +1,8 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:platform_alert_dialog/platform_alert_dialog.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 alert(String message, Color backgroundColor, context) {
   Flushbar(
@@ -36,8 +36,6 @@ exitAlert(context) {
                     SharedPreferences localStorage =
                         await SharedPreferences.getInstance();
                     localStorage.clear();
-
-                    Navigator.of(context).pop();
 
                     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                   }),
